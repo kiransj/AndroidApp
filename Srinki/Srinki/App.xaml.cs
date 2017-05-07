@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Srinki.DataModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,12 +14,14 @@ namespace Srinki
 		{
 			InitializeComponent();
 
-			MainPage = new Srinki.MainPage();
+			MainPage = new Srinki.BoothInformationPage();
 		}
 
 		protected override void OnStart ()
 		{
-			// Handle when your app starts
+            // Handle when your app starts
+            //BoothInformation bi = new BoothInformation();
+            //bi.updateBoothInformation();
 		}
 
 		protected override void OnSleep ()
