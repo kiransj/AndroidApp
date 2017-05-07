@@ -21,39 +21,56 @@ namespace Srinki
 
             var boothNumberInput = new Entry
             {
-                Placeholder = "Enter Booth Number",
+                Placeholder = "Booth Number",
                 HorizontalTextAlignment = TextAlignment.Center,
                 TextColor = Color.Blue,
-                Keyboard = Keyboard.Numeric                
+                Keyboard = Keyboard.Numeric,
+                FontSize = 25
             };
-            boothNumberInput.Completed += BoothNumberInput_Completed;
-
-            var displayItems = boothInformation.GetBoothInformationDisplayItems(boothNumber);
+            boothNumberInput.Completed += BoothNumberInput_Completed;            
+            
             listView = new ListView
-            {
-                BindingContext = displayItems,
-                ItemsSource = displayItems,
+            {                
+                ItemsSource = boothInformation.GetBoothInformationDisplayItems(boothNumber),
                 HasUnevenRows = true,
                 ItemTemplate = new DataTemplate(() =>
                 {
                     TextCell cell = new TextCell();
                     cell.SetBinding(TextCell.TextProperty, new Binding("Text"));
                     cell.SetBinding(TextCell.DetailProperty, new Binding("Detail"));                                      
-                    cell.TextColor = Color.Red;
+                    cell.TextColor = Color.Red;                         
                     return cell;
-                })                
+                }),
+                SeparatorColor = Color.Black,                
             };
+
+            listView.ItemSelected += ListView_ItemSelected;
+
+            var shareButton = new Button
+            {
+                Text = "Share",
+                TextColor = Color.Blue
+            };            
 
             // Build the page.
             this.Content = new StackLayout
             {
-                Orientation = StackOrientation.Vertical,
+                Orientation = StackOrientation.Vertical,                
                 Children =
                 {
                     boothNumberInput,
-                    listView
-                }
+                    listView,
+                    shareButton
+                }                
             };
+        }
+
+        async private void ListView_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+        {
+            if (e.SelectedItem == null) return;
+            var item = (DisplayItem)e.SelectedItem;
+            ((ListView)sender).SelectedItem = null;
+            await DisplayAlert(item.Text, item.Detail, "Ok");                       
         }
 
         async private void BoothNumberInput_Completed(object sender, EventArgs e)
@@ -63,7 +80,7 @@ namespace Srinki
             {
                 Entry en = (Entry)sender;
                 boothNumber = Int32.Parse(en.Text);
-                listView.ItemsSource = boothInformation.GetBoothInformationDisplayItems(boothNumber + 1000); ;
+                listView.ItemsSource = boothInformation.GetBoothInformationDisplayItems(boothNumber); ;
             }
             catch(Exception ex)
             {

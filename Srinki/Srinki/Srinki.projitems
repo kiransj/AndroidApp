@@ -17,6 +17,7 @@
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)DataModel\BoothInformation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DataModel\GoogleSheetApi.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DataModel\RoadInformation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>

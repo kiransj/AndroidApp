@@ -7,7 +7,7 @@ using System.Text;
 namespace Srinki.DataModel
 {
 
-    class BoothInformationDisplayItem
+    class DisplayItem
     {
         public int boothNumber;
         public string Text { get; set; }
@@ -58,7 +58,7 @@ namespace Srinki.DataModel
             return boothInformation;
         }
 
-        public List<BoothInformationDisplayItem> GetBoothInformationDisplayItems(int boothNumber)
+        public List<DisplayItem> GetBoothInformationDisplayItems(int boothNumber)
         {
             if (boothInformation == null) updateBoothInformation();
             var boothList = boothInformation.Where(x => x.boothNumber == boothNumber).ToList();
@@ -67,14 +67,18 @@ namespace Srinki.DataModel
             if (boothList.Count == 0) throw new Exception("Valid booth Numbers are between 1 to " + boothInformation.Count);
             if (boothList.Count > 1) throw new Exception("More than one booth with booth Number " + boothNumber);
 
+            // Get the list booth in the list. Ideally there should be only one booth in the list
             var booth = boothList.First();
-            var boothItems = new List<BoothInformationDisplayItem>();
-            boothItems.Add(new BoothInformationDisplayItem() { Text = "Booth Address", Detail = booth.address });
-            boothItems.Add(new BoothInformationDisplayItem(){ Text =  "Booth Number", Detail = string.Format("{0}", booth.boothNumber) });
-            boothItems.Add(new BoothInformationDisplayItem() { Text = "Booth Population", Detail = string.Format("{0}", booth.population) });
-            boothItems.Add(new BoothInformationDisplayItem() { Text = "Locality", Detail = booth.locality });
-            boothItems.Add(new BoothInformationDisplayItem() { Text = "Ward Number", Detail = string.Format("{0}", booth.wardNumber) });
-                       
+            var boothItems = new List<DisplayItem>();
+            boothItems.Add(new DisplayItem() { Text = "Ward Number", Detail = string.Format("{0}", booth.wardNumber, boothNumber = booth.boothNumber) });            
+            boothItems.Add(new DisplayItem() { Text =  "Booth Number", Detail = string.Format("{0}", booth.boothNumber, boothNumber = booth.boothNumber) });
+            boothItems.Add(new DisplayItem() { Text = "Booth Population", Detail = string.Format("{0}", booth.population, boothNumber = booth.boothNumber) });
+            boothItems.Add(new DisplayItem() { Text = "Locality", Detail = booth.locality, boothNumber = booth.boothNumber });
+            boothItems.Add(new DisplayItem() { Text = "Booth Address", Detail = booth.address, boothNumber = booth.boothNumber });
+
+            boothItems = boothItems.OrderBy(x => x.Text).ToList();
+            boothItems.AddRange((new RoadInformation()).GetRoadInformationDisplayItems(boothNumber));
+
             return boothItems;
         }
     }
