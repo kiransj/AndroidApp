@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 
@@ -61,7 +62,10 @@ namespace Srinki.DataModel
         {
             if (boothInformation == null) updateBoothInformation();
             var boothList = boothInformation.Where(x => x.boothNumber == boothNumber).ToList();
-            if (boothList.Count != 1) throw new Exception("More than one booth with booth Number " + boothNumber);
+
+            //Check input and throw expection if required
+            if (boothList.Count == 0) throw new Exception("Valid booth Numbers are between 1 to " + boothInformation.Count);
+            if (boothList.Count > 1) throw new Exception("More than one booth with booth Number " + boothNumber);
 
             var booth = boothList.First();
             var boothItems = new List<BoothInformationDisplayItem>();
@@ -74,6 +78,4 @@ namespace Srinki.DataModel
             return boothItems;
         }
     }
-
-
 }
