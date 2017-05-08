@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
+using Srinki;
+
 namespace Srinki
 {
     public partial class App : Application
@@ -14,18 +16,20 @@ namespace Srinki
         {
             InitializeComponent();
 
-            MainPage = new Srinki.BoothInformationPage();
+            if (!LoginPage.loginStatus())
+                MainPage = new LoginPage();
+            else
+                MainPage = new MainPage();
         }
 
         protected override void OnStart()
         {
             try
             {
-                List<Information> components = new List<Information>();
-                components.Add(new BoothInformation());
-                components.Add(new RoadInformation());
-
-                Parallel.ForEach(components, x => x.UpdateInformation());
+                var TaskRoad = new Task(() => { (new RoadInformation()).UpdateInformation(); });
+                var TaskBooth = new Task(() => { (new BoothInformation()).UpdateInformation(); });
+                TaskRoad.Start();
+                TaskBooth.Start();
             }
             catch(Exception)
             {

@@ -13,7 +13,7 @@ namespace Srinki
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class BoothInformationPage : ContentPage
     {
-        ListView listView;        
+        ListView listView;
         BoothInformation boothInformation = new BoothInformation();
         public BoothInformationPage(int boothNumber = 0)
         {
@@ -31,19 +31,19 @@ namespace Srinki
 
             listView = new ListView
             {
-                ItemsSource = boothNumber > 0 ? 
-                              boothInformation.GetBoothInformationDisplayItems(boothNumber) : 
+                ItemsSource = boothNumber > 0 ?
+                              boothInformation.GetBoothInformationDisplayItems(boothNumber) :
                               new List<DisplayItem>(), //Create a empty list
                 HasUnevenRows = true,
                 ItemTemplate = new DataTemplate(() =>
                 {
                     TextCell cell = new TextCell();
                     cell.SetBinding(TextCell.TextProperty, new Binding("Text"));
-                    cell.SetBinding(TextCell.DetailProperty, new Binding("Detail"));                                      
-                    cell.TextColor = Color.Red;                         
+                    cell.SetBinding(TextCell.DetailProperty, new Binding("Detail"));
+                    cell.TextColor = Color.Red;
                     return cell;
                 }),
-                SeparatorColor = Color.Black,                
+                SeparatorColor = Color.Black,
             };
 
             listView.ItemSelected += ListView_ItemSelected;
@@ -52,18 +52,18 @@ namespace Srinki
             {
                 Text = "Share",
                 TextColor = Color.Blue
-            };            
+            };
 
             // Build the page.
             this.Content = new StackLayout
             {
-                Orientation = StackOrientation.Vertical,                
+                Orientation = StackOrientation.Vertical,
                 Children =
                 {
                     boothNumberInput,
                     listView,
                     shareButton
-                }                
+                },
             };
         }
 
@@ -72,22 +72,27 @@ namespace Srinki
             if (e.SelectedItem == null) return;
             var item = (DisplayItem)e.SelectedItem;
             ((ListView)sender).SelectedItem = null;
-            await DisplayAlert(item.Text, item.Detail, "Ok");                       
+            await DisplayAlert(item.Text, item.Detail, "Ok");
         }
 
         async private void BoothNumberInput_Completed(object sender, EventArgs e)
         {
-            int boothNumber = 0 ;
+            int boothNumber = 0;
             try
             {
                 Entry en = (Entry)sender;
                 boothNumber = Int32.Parse(en.Text);
                 listView.ItemsSource = boothInformation.GetBoothInformationDisplayItems(boothNumber); ;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 await DisplayAlert("Error", "Booth Information not loaded or BoothNumber " + boothNumber + " is invalid\n" + ex.Message, "Ok");
             }
+        }
+
+        protected override bool OnBackButtonPressed()
+        {
+            return base.OnBackButtonPressed(); ;
         }
     }
 }
