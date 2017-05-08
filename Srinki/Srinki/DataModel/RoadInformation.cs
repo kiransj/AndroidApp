@@ -37,11 +37,11 @@ namespace Srinki.DataModel
             roadInformation = roadInformation_tmp;
         }
 
-        public List<RoadInformation> getRoadInformation()
+        public List<RoadInformation> getRoadInformation(int boothNumber)
         {
             if (roadInformation == null)
                 throw new Exception("road information not initialized");
-            return roadInformation;
+            return roadInformation.Where(x => x.boothNumber == boothNumber).ToList();            
         }
 
         public List<DisplayItem> GetRoadInformationDisplayItems(int boothNumber)

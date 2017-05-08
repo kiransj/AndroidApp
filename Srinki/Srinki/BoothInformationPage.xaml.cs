@@ -15,6 +15,7 @@ namespace Srinki
     {
         ListView listView;
         BoothInformation boothInformation = new BoothInformation();
+        int currentBoothNumberDisplayed;
         public BoothInformationPage(int boothNumber = 0)
         {
             InitializeComponent();
@@ -28,7 +29,7 @@ namespace Srinki
                 FontSize = 25
             };
             boothNumberInput.Completed += BoothNumberInput_Completed;
-
+            currentBoothNumberDisplayed = boothNumber;
             listView = new ListView
             {
                 ItemsSource = boothNumber > 0 ?
@@ -55,6 +56,7 @@ namespace Srinki
                 HorizontalOptions = LayoutOptions.FillAndExpand,
                 VerticalOptions = LayoutOptions.CenterAndExpand,
             };
+            shareButton.Clicked += ShareButton_Clicked;
 
             var agentDetails = new Button
             {
@@ -85,6 +87,24 @@ namespace Srinki
             };
         }
 
+        async private void ShareButton_Clicked(object sender, EventArgs e)
+        {            
+            try
+            { 
+                var items = boothInformation.GetBoothInformationDisplayItems(currentBoothNumberDisplayed);
+                string str = "";
+                foreach(var item in items)
+                {
+                    str += item.Text + ":" + item.Detail + "\n";
+                }
+                IntentService.SendData(str);
+            }
+            catch(Exception ex)
+            {
+                await DisplayAlert("Error!", ex.Message, "Ok");
+            }
+        }
+
         async private void ListView_ItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
             if (e.SelectedItem == null) return;
@@ -100,7 +120,8 @@ namespace Srinki
             {
                 Entry en = (Entry)sender;
                 boothNumber = Int32.Parse(en.Text);
-                listView.ItemsSource = boothInformation.GetBoothInformationDisplayItems(boothNumber); ;
+                listView.ItemsSource = boothInformation.GetBoothInformationDisplayItems(boothNumber);
+                currentBoothNumberDisplayed = boothNumber;
             }
             catch (Exception ex)
             {

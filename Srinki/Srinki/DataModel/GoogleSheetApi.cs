@@ -30,7 +30,7 @@ namespace Srinki.DataModel
             String sheetRange = string.Format("'{0}'!{1}", sheetName, range);
             try
             {
-                SpreadsheetsResource.ValuesResource.GetRequest request = service.Spreadsheets.Values.Get(spreadSheetId, sheetRange);
+                SpreadsheetsResource.ValuesResource.GetRequest request = service.Spreadsheets.Values.Get(spreadSheetId, sheetRange);                
                 valuRange = request.Execute();
             }
             catch (Exception ex)

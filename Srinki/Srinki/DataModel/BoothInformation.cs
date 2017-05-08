@@ -21,7 +21,7 @@ namespace Srinki.DataModel
         public string address  { get; set; }
         public string locality { get; set; }
 
-        static List<BoothInformation> boothInformation = null;
+        static List<BoothInformation> boothInformation = null;        
 
         public BoothInformation()
         {
@@ -56,11 +56,16 @@ namespace Srinki.DataModel
             boothInformation = boothInformation_tmp;
         }
 
-        public List<BoothInformation> getBoothInformation()
+        public BoothInformation getBoothInformation(int boothNumber)
         {
-            if (boothInformation == null)
-                throw new Exception("booth information not initialized");
-            return boothInformation;
+            if (boothInformation == null) throw new Exception("booth information not initialized");
+            var booth = boothInformation.Where(x => x.boothNumber == boothNumber).ToList();
+
+            //Check input and throw expection if required
+            if (booth.Count == 0) throw new Exception("Valid booth Numbers are between 1 to " + boothInformation.Count);
+            if (booth.Count > 1) throw new Exception("More than one booth with booth Number " + boothNumber);
+
+            return booth.First();
         }
 
         public List<DisplayItem> GetBoothInformationDisplayItems(int boothNumber)

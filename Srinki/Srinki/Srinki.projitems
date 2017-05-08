@@ -19,6 +19,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)DataModel\GoogleSheetApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DataModel\Information.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DataModel\RoadInformation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)services\IntentService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)LoginPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -45,5 +46,8 @@
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)LoginPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)services\" />
   </ItemGroup>
 </Project>
