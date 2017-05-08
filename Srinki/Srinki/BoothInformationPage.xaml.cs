@@ -50,8 +50,18 @@ namespace Srinki
 
             var shareButton = new Button
             {
-                Text = "Share",
-                TextColor = Color.Blue
+                Text = "Share Details",
+                TextColor = Color.Blue,
+                HorizontalOptions = LayoutOptions.FillAndExpand,
+                VerticalOptions = LayoutOptions.CenterAndExpand,
+            };
+
+            var agentDetails = new Button
+            {
+                Text = "Agent Details",
+                TextColor = Color.Blue,
+                HorizontalOptions =  LayoutOptions.FillAndExpand,
+                VerticalOptions = LayoutOptions.CenterAndExpand,
             };
 
             // Build the page.
@@ -62,7 +72,15 @@ namespace Srinki
                 {
                     boothNumberInput,
                     listView,
-                    shareButton
+                    new StackLayout
+                    {
+                        Orientation = StackOrientation.Horizontal,
+                        Children =
+                        {
+                            shareButton,
+                            agentDetails
+                        }                        
+                    },                    
                 },
             };
         }
