@@ -19,7 +19,7 @@ namespace Srinki
         public BoothInformationPage(int boothNumber = 0)
         {
             InitializeComponent();
-
+            
             var boothNumberInput = new Entry
             {
                 Placeholder = "Booth Number",
@@ -61,7 +61,7 @@ namespace Srinki
 
             var agentDetails = new Button
             {
-                Text = "Agent Details",
+                Text = "Agent Details",                
                 TextColor = Color.Blue,
                 HorizontalOptions =  LayoutOptions.FillAndExpand,
                 VerticalOptions = LayoutOptions.CenterAndExpand,

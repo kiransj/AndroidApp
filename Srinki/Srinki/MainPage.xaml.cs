@@ -56,8 +56,7 @@ namespace Srinki
 
             updateData = new Button
             {
-                Text = "Update Data",
-                HorizontalOptions = LayoutOptions.FillAndExpand,
+                Text = "Update Data\nLast updated on " + (Xamarin.Forms.Application.Current.Properties["lastUpdatedTime"].ToString()),
                 VerticalOptions = LayoutOptions.FillAndExpand,
                 TextColor = Color.Green,                
             };
@@ -124,7 +123,7 @@ namespace Srinki
                 updated = true;
             }
             catch(Exception ex)
-            {
+            {                
                 Device.BeginInvokeOnMainThread(async () => 
                 {
                     await DisplayAlert("Error!", "Failed to update data from internet\n" + ex.Message, "Ok");                                        
@@ -136,7 +135,7 @@ namespace Srinki
                     updateData.IsEnabled = true;
                     boothInformation.IsEnabled = true;
                     agentInformation.IsEnabled = true;
-                    updateData.Text = updated == false ? "Failed to Update Data. Try again?" : "Update Data";
+                    updateData.Text = updated == false ? "Failed to Update Data. Try again?" : "Update Data\nLast Updated on " + DateTime.Now.ToString("dd-MM-yy HH:mm"); ;
                     updateData.TextColor = (updated == true) ? Color.Green : Color.Red;
                 });
             }

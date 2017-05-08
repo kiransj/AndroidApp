@@ -90,5 +90,11 @@ namespace Srinki.DataModel
 
             return booth.First();
         }
+
+        public int getBoothCount()
+        {
+            if (boothInformation == null) throw new Exception("booth information not initialized. Try updating data");
+            return boothInformation.Count;
+        }
     }
 }

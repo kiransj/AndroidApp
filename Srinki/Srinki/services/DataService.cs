@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Srinki.DataModel;
 using System.Linq;
+using Xamarin.Forms;
 
 namespace Srinki.services
 {
@@ -17,8 +18,8 @@ namespace Srinki.services
     {
         RoadInformation roadInformation;
         BoothInformation boothInformation;
-        static DataService dataService = null;
-        TimeSpan lastUpdatedTime;
+        AgentInformation agentInformation;
+        static DataService dataService = null;        
         bool dataStatus;
 
         public bool DataStatus {
@@ -32,7 +33,7 @@ namespace Srinki.services
         {
             roadInformation = new RoadInformation();
             boothInformation = new BoothInformation();
-            lastUpdatedTime = new TimeSpan();
+            agentInformation = new AgentInformation();
         }
         
 
@@ -42,16 +43,14 @@ namespace Srinki.services
             return dataService;
         }
 
-        public double timeSinceLastUpdateInSeconds()
-        {
-            return (DateTime.Now.TimeOfDay - lastUpdatedTime).TotalSeconds;
-        }
 
         public void UpdateData()
         {
             roadInformation.UpdateInformation();
             boothInformation.UpdateInformation();
-            lastUpdatedTime = DateTime.Now.TimeOfDay;
+            agentInformation.UpdateInformation();
+            Application.Current.Properties["lastUpdatedTime"] = DateTime.Now.ToString("dd-MM-yy HH:mm");
+            Application.Current.SavePropertiesAsync();
             saveDataToFile();
             dataStatus = true;
         }
@@ -60,13 +59,15 @@ namespace Srinki.services
         {
             roadInformation.writeDataToFile();
             boothInformation.writeDataToFile();
+            agentInformation.writeDataToFile();
             return "";
         }
 
         public void readDataFromFile()
         {
-            dataStatus = roadInformation.readDataFromFile();
+            dataStatus = roadInformation.readDataFromFile();            
             dataStatus = boothInformation.readDataFromFile() && dataStatus;
+            dataStatus = agentInformation.readDataFromFile() && dataStatus;
         }
 
 
@@ -89,21 +90,56 @@ namespace Srinki.services
             return roads;
         }
 
+        public List<DisplayItem> GetAgentInformationDisplayItems(int boothNumber)
+        {
+            var agentList = agentInformation.getAgentInformation(boothNumber);
+
+            //Check input and throw expection if required
+            if (agentList.Count == 0) throw new Exception("InValid booth Numbers " + boothNumber);
+
+            // Get the list booth in the list. Ideally there should be only one booth in the list            
+            var agents = new List<DisplayItem>();
+            int count = 1;
+            foreach (var agent in agentList)
+            {
+                agents.Add(new DisplayItem { Text = "Agent " + count, Detail = agent.agentName + ", " + agent.phoneNumber, boothNumber = agent.boothNumber });
+                count++;
+            }
+
+            return agents;
+        }
+ 
         public List<DisplayItem> GetBoothInformationDisplayItems(int boothNumber)
         {
             // Get the list booth in the list. Ideally there should be only one booth in the list
             var booth = boothInformation.getBoothInformation(boothNumber);
             var boothItems = new List<DisplayItem>();
-            boothItems.Add(new DisplayItem() { Text = "Ward Number", Detail = string.Format("{0}", booth.wardNumber, boothNumber = booth.boothNumber) });
+
+            boothItems.AddRange(GetAgentInformationDisplayItems(boothNumber));
+
+            boothItems.Add(new DisplayItem() { Text = "Booth Address", Detail = booth.address, boothNumber = booth.boothNumber });
             boothItems.Add(new DisplayItem() { Text = "Booth Number", Detail = string.Format("{0}", booth.boothNumber, boothNumber = booth.boothNumber) });
             boothItems.Add(new DisplayItem() { Text = "Booth Population", Detail = string.Format("{0}", booth.population, boothNumber = booth.boothNumber) });
+            boothItems.Add(new DisplayItem() { Text = "Ward Number", Detail = string.Format("{0}", booth.wardNumber, boothNumber = booth.boothNumber) });
             boothItems.Add(new DisplayItem() { Text = "Locality", Detail = booth.locality, boothNumber = booth.boothNumber });
-            boothItems.Add(new DisplayItem() { Text = "Booth Address", Detail = booth.address, boothNumber = booth.boothNumber });
+            
 
             boothItems = boothItems.OrderBy(x => x.Text).ToList();
-            boothItems.AddRange(GetRoadInformationDisplayItems(boothNumber));
+            try
+            {
+                boothItems.AddRange(GetRoadInformationDisplayItems(boothNumber));                
+            }
+            catch(Exception)
+            {
+
+            }
 
             return boothItems;
+        }
+
+        public int getNumberOfBooths()
+        {
+            return boothInformation.getBoothCount();
         }
     }
 }
