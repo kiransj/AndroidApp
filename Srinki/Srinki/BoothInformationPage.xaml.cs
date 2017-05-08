@@ -1,4 +1,5 @@
 ﻿using Srinki.DataModel;
+using Srinki.services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,8 +14,7 @@ namespace Srinki
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class BoothInformationPage : ContentPage
     {
-        ListView listView;
-        BoothInformation boothInformation = new BoothInformation();
+        ListView listView;        
         int currentBoothNumberDisplayed;
         public BoothInformationPage(int boothNumber = 0)
         {
@@ -33,7 +33,7 @@ namespace Srinki
             listView = new ListView
             {
                 ItemsSource = boothNumber > 0 ?
-                              boothInformation.GetBoothInformationDisplayItems(boothNumber) :
+                              DataService.getDataService().GetBoothInformationDisplayItems(boothNumber) :
                               new List<DisplayItem>(), //Create a empty list
                 HasUnevenRows = true,
                 ItemTemplate = new DataTemplate(() =>
@@ -44,7 +44,7 @@ namespace Srinki
                     cell.TextColor = Color.Red;
                     return cell;
                 }),
-                SeparatorColor = Color.Black,
+                SeparatorColor = Color.Black,                
             };
 
             listView.ItemSelected += ListView_ItemSelected;
@@ -55,6 +55,7 @@ namespace Srinki
                 TextColor = Color.Blue,
                 HorizontalOptions = LayoutOptions.FillAndExpand,
                 VerticalOptions = LayoutOptions.CenterAndExpand,
+                HeightRequest = 70
             };
             shareButton.Clicked += ShareButton_Clicked;
 
@@ -64,6 +65,7 @@ namespace Srinki
                 TextColor = Color.Blue,
                 HorizontalOptions =  LayoutOptions.FillAndExpand,
                 VerticalOptions = LayoutOptions.CenterAndExpand,
+                HeightRequest = 70
             };
 
             // Build the page.
@@ -91,7 +93,7 @@ namespace Srinki
         {            
             try
             { 
-                var items = boothInformation.GetBoothInformationDisplayItems(currentBoothNumberDisplayed);
+                var items = DataService.getDataService().GetBoothInformationDisplayItems(currentBoothNumberDisplayed);
                 string str = "";
                 foreach(var item in items)
                 {
@@ -120,7 +122,7 @@ namespace Srinki
             {
                 Entry en = (Entry)sender;
                 boothNumber = Int32.Parse(en.Text);
-                listView.ItemsSource = boothInformation.GetBoothInformationDisplayItems(boothNumber);
+                listView.ItemsSource = DataService.getDataService().GetBoothInformationDisplayItems(boothNumber);
                 currentBoothNumberDisplayed = boothNumber;
             }
             catch (Exception ex)

@@ -1,27 +1,28 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 
 namespace Srinki.DataModel
 {
-
-    class DisplayItem
-    {
-        public int boothNumber;
-        public string Text { get; set; }
-        public string Detail { get; set; }
-    }
+    [JsonObject(MemberSerialization.OptIn)]
     class BoothInformation : Information
     {
+        [JsonProperty]
         public int boothNumber { get; set; }
-        public int wardNumber  { get; set; }
-        public int population  { get; set; }
-        public string address  { get; set; }
+        [JsonProperty]
+        public int wardNumber { get; set; }
+        [JsonProperty]
+        public int population { get; set; }
+        [JsonProperty]
+        public string address { get; set; }
+        [JsonProperty]
         public string locality { get; set; }
 
-        static List<BoothInformation> boothInformation = null;        
+        static List<BoothInformation> boothInformation = null;
 
         public BoothInformation()
         {
@@ -31,6 +32,28 @@ namespace Srinki.DataModel
         public override void UpdateInformation()
         {
             updateBoothInformation();
+        }
+
+        public void writeDataToFile()
+        {
+            if (boothInformation == null) throw new Exception("booth information not initialized. Try updating data");
+
+            var data = JsonConvert.SerializeObject(boothInformation);
+            var path = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData);
+            var filename = Path.Combine(path, "boothInformation.json");
+            if (File.Exists(filename)) File.Delete(filename);
+            File.WriteAllText(filename, data);
+        }
+
+        public bool readDataFromFile()
+        {
+            var path = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData);
+            var filename = Path.Combine(path, "boothInformation.json");
+            if (!File.Exists(filename)) return false;
+            var data = JsonConvert.DeserializeObject<List<BoothInformation>>(File.ReadAllText(filename));
+            if (data.Count > 0)
+                boothInformation = data;
+            return data.Count > 0;
         }
 
         public void updateBoothInformation()
@@ -66,23 +89,6 @@ namespace Srinki.DataModel
             if (booth.Count > 1) throw new Exception("More than one booth with booth Number " + boothNumber);
 
             return booth.First();
-        }
-
-        public List<DisplayItem> GetBoothInformationDisplayItems(int boothNumber)
-        {            
-            // Get the list booth in the list. Ideally there should be only one booth in the list
-            var booth = getBoothInformation(boothNumber);
-            var boothItems = new List<DisplayItem>();
-            boothItems.Add(new DisplayItem() { Text = "Ward Number", Detail = string.Format("{0}", booth.wardNumber, boothNumber = booth.boothNumber) });            
-            boothItems.Add(new DisplayItem() { Text =  "Booth Number", Detail = string.Format("{0}", booth.boothNumber, boothNumber = booth.boothNumber) });
-            boothItems.Add(new DisplayItem() { Text = "Booth Population", Detail = string.Format("{0}", booth.population, boothNumber = booth.boothNumber) });
-            boothItems.Add(new DisplayItem() { Text = "Locality", Detail = booth.locality, boothNumber = booth.boothNumber });
-            boothItems.Add(new DisplayItem() { Text = "Booth Address", Detail = booth.address, boothNumber = booth.boothNumber });
-
-            boothItems = boothItems.OrderBy(x => x.Text).ToList();
-            boothItems.AddRange((new RoadInformation()).GetRoadInformationDisplayItems(boothNumber));
-
-            return boothItems;
         }
     }
 }

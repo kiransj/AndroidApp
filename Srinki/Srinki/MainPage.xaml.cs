@@ -1,5 +1,6 @@
 ﻿using Android.App;
 using Srinki.DataModel;
+using Srinki.services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace Srinki
 {
     public partial class MainPage : ContentPage
     {
-        Button updateData;
+        Button updateData, boothInformation, agentInformation, Contacts, notification, stats;
         public MainPage()
         {
             InitializeComponent();
@@ -25,29 +26,32 @@ namespace Srinki
 
             grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
 
-            var boothInformation = new Button
+            boothInformation = new Button
             {
                 Text = "Booth Information",
                 HorizontalOptions = LayoutOptions.FillAndExpand,
                 VerticalOptions = LayoutOptions.FillAndExpand,
-                TextColor = Color.Green
+                TextColor = Color.Green,
+                IsEnabled = false
             };
             boothInformation.Clicked += BoothInformation_Clicked;
 
-            var agentInformation = new Button
+            agentInformation = new Button
             {
                 Text = "Agent Information",
                 HorizontalOptions = LayoutOptions.FillAndExpand,
                 VerticalOptions = LayoutOptions.FillAndExpand,
-                TextColor = Color.Green
+                TextColor = Color.Green,
+                IsEnabled = false
             };
 
-            var Contacts = new Button
+            Contacts = new Button
             {
                 Text = "Frequent Contacts",
                 HorizontalOptions = LayoutOptions.FillAndExpand,
                 VerticalOptions = LayoutOptions.FillAndExpand,
-                TextColor = Color.Green
+                TextColor = Color.Green,
+                IsEnabled = false
             };
 
             updateData = new Button
@@ -55,23 +59,25 @@ namespace Srinki
                 Text = "Update Data",
                 HorizontalOptions = LayoutOptions.FillAndExpand,
                 VerticalOptions = LayoutOptions.FillAndExpand,
-                TextColor = Color.Green
-            };
-
-            var notification = new Button
-            {
-                Text = "notifications",
-                HorizontalOptions = LayoutOptions.FillAndExpand,
-                VerticalOptions = LayoutOptions.FillAndExpand,
-                TextColor = Color.Green
-            };
-
-            var settings = new Button
-            {
-                Text = "Settings",
-                HorizontalOptions = LayoutOptions.FillAndExpand,
-                VerticalOptions = LayoutOptions.FillAndExpand,
                 TextColor = Color.Green,                
+            };
+
+            notification = new Button
+            {
+                Text = "4 new notification",
+                HorizontalOptions = LayoutOptions.FillAndExpand,
+                VerticalOptions = LayoutOptions.FillAndExpand,
+                TextColor = Color.Green,
+                IsEnabled = false
+            };
+
+            stats = new Button
+            {
+                Text = "Stats",
+                HorizontalOptions = LayoutOptions.FillAndExpand,
+                VerticalOptions = LayoutOptions.FillAndExpand,
+                TextColor = Color.Green,
+                IsEnabled = false
             };
 
             grid.Children.Add(boothInformation, 0, 0);
@@ -80,17 +86,29 @@ namespace Srinki
             grid.Children.Add(updateData, 1, 1);
 
             grid.Children.Add(notification, 0, 2);
-            grid.Children.Add(settings, 1, 2);
-            
+            grid.Children.Add(stats, 1, 2);
+
+            stats.Clicked += Stats_Clicked;
             updateData.Clicked += UpdateData_Clicked;
-            // Try updating data
-            UpdateData_Clicked(null, null);
+
+            if(DataService.getDataService().DataStatus)
+            {
+                updateData.IsEnabled = true;
+                boothInformation.IsEnabled = true;
+                agentInformation.IsEnabled = true;
+                stats.IsEnabled = true;
+            }
             
             this.Content = grid;
         }
 
-        private void UpdateData_Clicked(object sender, EventArgs e)
+        private void Stats_Clicked(object sender, EventArgs e)
         {
+            
+        }
+
+        private void UpdateData_Clicked(object sender, EventArgs e)
+        {                            
             updateData.IsEnabled = false;
             updateData.Text = "Updating data from internet";
             updateData.TextColor = Color.Blue; 
@@ -98,12 +116,11 @@ namespace Srinki
         }
 
         private void updateInformation()
-        {
+        {            
             bool updated = false;
             try
             {
-                (new RoadInformation()).UpdateInformation();
-                (new BoothInformation()).UpdateInformation();
+                DataService.getDataService().UpdateData();
                 updated = true;
             }
             catch(Exception ex)
@@ -117,6 +134,8 @@ namespace Srinki
             {
                 Device.BeginInvokeOnMainThread(() => {
                     updateData.IsEnabled = true;
+                    boothInformation.IsEnabled = true;
+                    agentInformation.IsEnabled = true;
                     updateData.Text = updated == false ? "Failed to Update Data. Try again?" : "Update Data";
                     updateData.TextColor = (updated == true) ? Color.Green : Color.Red;
                 });

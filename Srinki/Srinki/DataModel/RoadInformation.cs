@@ -1,13 +1,20 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Srinki.services;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
 namespace Srinki.DataModel
 {
+    [JsonObject(MemberSerialization.OptIn)]
     class RoadInformation : Information
     {
+        [JsonProperty]
         public int boothNumber { get; set; }
+
+        [JsonProperty]
         public string address { get; set; }
 
         static List<RoadInformation> roadInformation = null;
@@ -44,23 +51,26 @@ namespace Srinki.DataModel
             return roadInformation.Where(x => x.boothNumber == boothNumber).ToList();            
         }
 
-        public List<DisplayItem> GetRoadInformationDisplayItems(int boothNumber)
+        public void writeDataToFile()
         {
-            var roadList = getRoadInformation(boothNumber);
+            if (roadInformation == null) throw new Exception("booth information not initialized. Try updating data");
 
-            //Check input and throw expection if required
-            if (roadList.Count == 0) throw new Exception("InValid booth Numbers " + boothNumber);            
+            var data = JsonConvert.SerializeObject(roadInformation);
+            var path = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData);
+            var filename = Path.Combine(path, "roadInformation.json");
+            if (File.Exists(filename)) File.Delete(filename);
+            File.WriteAllText(filename, data);
+        }
 
-            // Get the list booth in the list. Ideally there should be only one booth in the list            
-            var roads = new List<DisplayItem>();
-            int count = 1;
-            foreach(var road in roadList)
-            {
-                roads.Add(new DisplayItem { Text = "Road " + count, Detail = road.address, boothNumber = road.boothNumber });
-                count++;
-            }
+        public bool readDataFromFile()
+        {
+            var path = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData);
+            var filename = Path.Combine(path, "roadInformation.json");
+            if (!File.Exists(filename)) return false;
+            var data = JsonConvert.DeserializeObject<List<RoadInformation>>(File.ReadAllText(filename));
+            if (data.Count > 0) roadInformation = data;
 
-            return roads;
+            return data.Count > 0;
         }
     }
 }

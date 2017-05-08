@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 
 using Srinki;
+using Srinki.services;
 
 namespace Srinki
 {
@@ -24,7 +25,14 @@ namespace Srinki
 
         protected override void OnStart()
         {
+            try
+            {
+                DataService.getDataService().readDataFromFile();
+            }
+            catch(Exception)
+            {
 
+            }
         }
 
         protected override void OnSleep()
