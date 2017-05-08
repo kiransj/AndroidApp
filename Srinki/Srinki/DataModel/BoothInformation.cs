@@ -58,7 +58,7 @@ namespace Srinki.DataModel
 
         public BoothInformation getBoothInformation(int boothNumber)
         {
-            if (boothInformation == null) throw new Exception("booth information not initialized");
+            if (boothInformation == null) throw new Exception("booth information not initialized. Try updating data");
             var booth = boothInformation.Where(x => x.boothNumber == boothNumber).ToList();
 
             //Check input and throw expection if required
@@ -69,19 +69,9 @@ namespace Srinki.DataModel
         }
 
         public List<DisplayItem> GetBoothInformationDisplayItems(int boothNumber)
-        {
-            if (boothInformation == null)
-                updateBoothInformation();
-
-
-            var boothList = boothInformation.Where(x => x.boothNumber == boothNumber).ToList();
-
-            //Check input and throw expection if required
-            if (boothList.Count == 0) throw new Exception("Valid booth Numbers are between 1 to " + boothInformation.Count);
-            if (boothList.Count > 1) throw new Exception("More than one booth with booth Number " + boothNumber);
-
+        {            
             // Get the list booth in the list. Ideally there should be only one booth in the list
-            var booth = boothList.First();
+            var booth = getBoothInformation(boothNumber);
             var boothItems = new List<DisplayItem>();
             boothItems.Add(new DisplayItem() { Text = "Ward Number", Detail = string.Format("{0}", booth.wardNumber, boothNumber = booth.boothNumber) });            
             boothItems.Add(new DisplayItem() { Text =  "Booth Number", Detail = string.Format("{0}", booth.boothNumber, boothNumber = booth.boothNumber) });

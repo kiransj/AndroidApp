@@ -24,17 +24,7 @@ namespace Srinki
 
         protected override void OnStart()
         {
-            try
-            {
-                var TaskRoad = new Task(() => { (new RoadInformation()).UpdateInformation(); });
-                var TaskBooth = new Task(() => { (new BoothInformation()).UpdateInformation(); });
-                TaskRoad.Start();
-                TaskBooth.Start();
-            }
-            catch(Exception)
-            {
 
-            }
         }
 
         protected override void OnSleep()

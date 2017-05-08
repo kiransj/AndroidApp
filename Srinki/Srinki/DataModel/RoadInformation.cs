@@ -40,14 +40,13 @@ namespace Srinki.DataModel
         public List<RoadInformation> getRoadInformation(int boothNumber)
         {
             if (roadInformation == null)
-                throw new Exception("road information not initialized");
+                throw new Exception("road information not initialized. Try updating data");
             return roadInformation.Where(x => x.boothNumber == boothNumber).ToList();            
         }
 
         public List<DisplayItem> GetRoadInformationDisplayItems(int boothNumber)
         {
-            if (roadInformation == null) updateRoadInformation();
-            var roadList = roadInformation.Where(x => x.boothNumber == boothNumber).ToList();
+            var roadList = getRoadInformation(boothNumber);
 
             //Check input and throw expection if required
             if (roadList.Count == 0) throw new Exception("InValid booth Numbers " + boothNumber);            
