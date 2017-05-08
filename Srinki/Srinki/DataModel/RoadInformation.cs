@@ -5,12 +5,17 @@ using System.Text;
 
 namespace Srinki.DataModel
 {
-    class RoadInformation
+    class RoadInformation : Information
     {
         public int boothNumber { get; set; }
         public string address { get; set; }
 
         static List<RoadInformation> roadInformation = null;
+
+        public override void UpdateInformation()
+        {
+            updateRoadInformation();
+        }
 
         public void updateRoadInformation()
         {

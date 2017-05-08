@@ -13,7 +13,7 @@ namespace Srinki.DataModel
         public string Text { get; set; }
         public string Detail { get; set; }
     }
-    class BoothInformation
+    class BoothInformation : Information
     {
         public int boothNumber { get; set; }
         public int wardNumber  { get; set; }
@@ -26,6 +26,11 @@ namespace Srinki.DataModel
         public BoothInformation()
         {
 
+        }
+
+        public override void UpdateInformation()
+        {
+            updateBoothInformation();
         }
 
         public void updateBoothInformation()
@@ -60,7 +65,10 @@ namespace Srinki.DataModel
 
         public List<DisplayItem> GetBoothInformationDisplayItems(int boothNumber)
         {
-            if (boothInformation == null) updateBoothInformation();
+            if (boothInformation == null)
+                updateBoothInformation();
+
+
             var boothList = boothInformation.Where(x => x.boothNumber == boothNumber).ToList();
 
             //Check input and throw expection if required

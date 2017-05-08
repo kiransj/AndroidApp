@@ -15,7 +15,7 @@ namespace Srinki
     {
         ListView listView;        
         BoothInformation boothInformation = new BoothInformation();
-        public BoothInformationPage(int boothNumber = 1)
+        public BoothInformationPage(int boothNumber = 0)
         {
             InitializeComponent();
 
@@ -27,11 +27,13 @@ namespace Srinki
                 Keyboard = Keyboard.Numeric,
                 FontSize = 25
             };
-            boothNumberInput.Completed += BoothNumberInput_Completed;            
-            
+            boothNumberInput.Completed += BoothNumberInput_Completed;
+
             listView = new ListView
-            {                
-                ItemsSource = boothInformation.GetBoothInformationDisplayItems(boothNumber),
+            {
+                ItemsSource = boothNumber > 0 ? 
+                              boothInformation.GetBoothInformationDisplayItems(boothNumber) : 
+                              new List<DisplayItem>(), //Create a empty list
                 HasUnevenRows = true,
                 ItemTemplate = new DataTemplate(() =>
                 {
