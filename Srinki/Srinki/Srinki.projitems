@@ -9,6 +9,9 @@
     <Import_RootNamespace>Srinki</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)AgentInformationPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
@@ -19,6 +22,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)DataModel\BoothInformation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DataModel\GoogleSheetApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DataModel\Information.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)services\Properties.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DataModel\RoadInformation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)services\DataService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)services\IntentService.cs" />
@@ -46,6 +50,11 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)LoginPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)AgentInformationPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>

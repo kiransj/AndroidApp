@@ -36,17 +36,18 @@ namespace Srinki.DataModel
         {
             var googleSheet = new GoogleSheetApi();
             const string agentInformationpage = "AgentInformation";
-            var values = googleSheet.getSheetData(agentInformationpage, "A3:C");
+            var values = googleSheet.getSheetData(agentInformationpage, "A3:D");
             var agentInformation_tmp = new List<AgentInformation>();
             foreach (var row in values)
             {
                 // Print columns A and E, which correspond to indices 0 and 4.
-                Console.WriteLine("{0}, {1}, {2}", row[0], row[1], row[2]);
+                Console.WriteLine("{0}, {1}, {2}, {3}", row[0], row[1], row[2], row[3]);
                 agentInformation_tmp.Add(new AgentInformation()
                 {
                     boothNumber = Int32.Parse(row[0].ToString()),
                     agentName = row[1].ToString(),
-                    phoneNumber = row[2].ToString()
+                    phoneNumber = row[2].ToString(),
+                    address = row[3].ToString()
                 });
             }
 

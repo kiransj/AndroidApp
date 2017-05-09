@@ -15,8 +15,9 @@ namespace Srinki
     public partial class BoothInformationPage : ContentPage
     {
         ListView listView;        
-        int currentBoothNumberDisplayed;
-        public BoothInformationPage(int boothNumber = 0)
+        int currentBoothNumberDisplayed = 0;
+        Button shareButton, agentDetails;
+        public BoothInformationPage()
         {
             InitializeComponent();
             
@@ -28,13 +29,10 @@ namespace Srinki
                 Keyboard = Keyboard.Numeric,
                 FontSize = 25
             };
-            boothNumberInput.Completed += BoothNumberInput_Completed;
-            currentBoothNumberDisplayed = boothNumber;
+            boothNumberInput.Completed += BoothNumberInput_Completed;            
             listView = new ListView
             {
-                ItemsSource = boothNumber > 0 ?
-                              DataService.getDataService().GetBoothInformationDisplayItems(boothNumber) :
-                              new List<DisplayItem>(), //Create a empty list
+                ItemsSource = new List<DisplayItem>(), //Create a empty list
                 HasUnevenRows = true,
                 ItemTemplate = new DataTemplate(() =>
                 {
@@ -42,6 +40,7 @@ namespace Srinki
                     cell.SetBinding(TextCell.TextProperty, new Binding("Text"));
                     cell.SetBinding(TextCell.DetailProperty, new Binding("Detail"));
                     cell.TextColor = Color.Red;
+                    
                     return cell;
                 }),
                 SeparatorColor = Color.Black,                
@@ -49,24 +48,28 @@ namespace Srinki
 
             listView.ItemSelected += ListView_ItemSelected;
 
-            var shareButton = new Button
+            shareButton = new Button
             {
                 Text = "Share Details",
                 TextColor = Color.Blue,
                 HorizontalOptions = LayoutOptions.FillAndExpand,
                 VerticalOptions = LayoutOptions.CenterAndExpand,
-                HeightRequest = 70
+                HeightRequest = 70,
+                IsEnabled = false
             };
             shareButton.Clicked += ShareButton_Clicked;
 
-            var agentDetails = new Button
+            agentDetails = new Button
             {
                 Text = "Agent Details",                
                 TextColor = Color.Blue,
                 HorizontalOptions =  LayoutOptions.FillAndExpand,
                 VerticalOptions = LayoutOptions.CenterAndExpand,
-                HeightRequest = 70
+                HeightRequest = 70,
+                IsEnabled = false
             };
+
+            agentDetails.Clicked += AgentDetails_Clicked;
 
             // Build the page.
             this.Content = new StackLayout
@@ -87,6 +90,11 @@ namespace Srinki
                     },                    
                 },
             };
+        }
+
+        async private void AgentDetails_Clicked(object sender, EventArgs e)
+        {
+            await this.Navigation.PushModalAsync(new AgentInformationPage(currentBoothNumberDisplayed));
         }
 
         async private void ShareButton_Clicked(object sender, EventArgs e)
@@ -124,6 +132,8 @@ namespace Srinki
                 boothNumber = Int32.Parse(en.Text);
                 listView.ItemsSource = DataService.getDataService().GetBoothInformationDisplayItems(boothNumber);
                 currentBoothNumberDisplayed = boothNumber;
+                shareButton.IsEnabled = agentDetails.IsEnabled = true;
+                
             }
             catch (Exception ex)
             {

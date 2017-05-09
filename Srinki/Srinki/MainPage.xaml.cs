@@ -12,7 +12,7 @@ using Xamarin.Forms;
 namespace Srinki
 {
     public partial class MainPage : ContentPage
-    {
+    {        
         Button updateData, boothInformation, agentInformation, Contacts, notification, stats;
         public MainPage()
         {
@@ -32,50 +32,56 @@ namespace Srinki
                 HorizontalOptions = LayoutOptions.FillAndExpand,
                 VerticalOptions = LayoutOptions.FillAndExpand,
                 TextColor = Color.Green,
-                IsEnabled = false
+                IsEnabled = false,
+                Margin = 1,
             };
             boothInformation.Clicked += BoothInformation_Clicked;
 
             agentInformation = new Button
             {
                 Text = "Agent Information",
+                Margin = 1,
                 HorizontalOptions = LayoutOptions.FillAndExpand,
                 VerticalOptions = LayoutOptions.FillAndExpand,
-                TextColor = Color.Green,
+                TextColor = Color.Green,                
                 IsEnabled = false
             };
 
             Contacts = new Button
             {
-                Text = "Frequent Contacts",
+                Text = "Contacts",
+                Margin = 1,
                 HorizontalOptions = LayoutOptions.FillAndExpand,
                 VerticalOptions = LayoutOptions.FillAndExpand,
-                TextColor = Color.Green,
+                TextColor = Color.Green,                
                 IsEnabled = false
             };
 
             updateData = new Button
             {
-                Text = "Update Data\nLast updated on " + (Xamarin.Forms.Application.Current.Properties["lastUpdatedTime"].ToString()),
+                Text = "Update Data\nLast updated on " + Properties.lastUpdatedTime,
                 VerticalOptions = LayoutOptions.FillAndExpand,
-                TextColor = Color.Green,                
+                TextColor = Color.Green,
+                Margin = 1,
             };
 
             notification = new Button
             {
-                Text = "4 new notification",
+                Text = "Notification",
+                Margin = 1,
                 HorizontalOptions = LayoutOptions.FillAndExpand,
                 VerticalOptions = LayoutOptions.FillAndExpand,
-                TextColor = Color.Green,
+                TextColor = Color.Red,                
                 IsEnabled = false
             };
 
             stats = new Button
             {
                 Text = "Stats",
+                Margin = 1,
                 HorizontalOptions = LayoutOptions.FillAndExpand,
                 VerticalOptions = LayoutOptions.FillAndExpand,
-                TextColor = Color.Green,
+                TextColor = Color.Green,                
                 IsEnabled = false
             };
 
@@ -86,6 +92,13 @@ namespace Srinki
 
             grid.Children.Add(notification, 0, 2);
             grid.Children.Add(stats, 1, 2);
+
+#if false
+            agentInformation.Image = "voting.png";
+            stats.Image = "stats";
+            Contacts.Image = "Contacts";
+            notification.Image = "notification";
+#endif
 
             stats.Clicked += Stats_Clicked;
             updateData.Clicked += UpdateData_Clicked;
@@ -135,7 +148,7 @@ namespace Srinki
                     updateData.IsEnabled = true;
                     boothInformation.IsEnabled = true;
                     agentInformation.IsEnabled = true;
-                    updateData.Text = updated == false ? "Failed to Update Data. Try again?" : "Update Data\nLast Updated on " + DateTime.Now.ToString("dd-MM-yy HH:mm"); ;
+                    updateData.Text = updated == false ? "Failed to Update Data. Try again?" : "Update Data\nLast Updated on " + Properties.lastUpdatedTime;
                     updateData.TextColor = (updated == true) ? Color.Green : Color.Red;
                 });
             }

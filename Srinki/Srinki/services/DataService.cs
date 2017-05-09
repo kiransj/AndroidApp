@@ -9,9 +9,10 @@ namespace Srinki.services
 {
     class DisplayItem
     {
-        public int boothNumber;
+        public int boothNumber { get; set; }
         public string Text { get; set; }
         public string Detail { get; set; }
+        public string phoneNumber { get; set; }
     }
 
     class DataService
@@ -19,10 +20,11 @@ namespace Srinki.services
         RoadInformation roadInformation;
         BoothInformation boothInformation;
         AgentInformation agentInformation;
-        static DataService dataService = null;        
+        static DataService dataService = null;
         bool dataStatus;
 
-        public bool DataStatus {
+        public bool DataStatus
+        {
             get
             {
                 return dataStatus;
@@ -35,7 +37,7 @@ namespace Srinki.services
             boothInformation = new BoothInformation();
             agentInformation = new AgentInformation();
         }
-        
+
 
         public static DataService getDataService()
         {
@@ -49,10 +51,10 @@ namespace Srinki.services
             roadInformation.UpdateInformation();
             boothInformation.UpdateInformation();
             agentInformation.UpdateInformation();
-            Application.Current.Properties["lastUpdatedTime"] = DateTime.Now.ToString("dd-MM-yy HH:mm");
-            Application.Current.SavePropertiesAsync();
             saveDataToFile();
             dataStatus = true;
+
+            Properties.setLastUpdatedTime();
         }
 
         public string saveDataToFile()
@@ -65,7 +67,7 @@ namespace Srinki.services
 
         public void readDataFromFile()
         {
-            dataStatus = roadInformation.readDataFromFile();            
+            dataStatus = roadInformation.readDataFromFile();
             dataStatus = boothInformation.readDataFromFile() && dataStatus;
             dataStatus = agentInformation.readDataFromFile() && dataStatus;
         }
@@ -102,37 +104,44 @@ namespace Srinki.services
             int count = 1;
             foreach (var agent in agentList)
             {
-                agents.Add(new DisplayItem { Text = "Agent " + count, Detail = agent.agentName + ", " + agent.phoneNumber, boothNumber = agent.boothNumber });
+                agents.Add(new DisplayItem
+                {
+                    phoneNumber = agent.phoneNumber,
+                                  Text = "Agent " + count,
+                                  Detail = agent.agentName + ", " + agent.phoneNumber + "\n" + agent.address,
+                                  boothNumber = agent.boothNumber
+                });
                 count++;
             }
 
             return agents;
         }
- 
+
         public List<DisplayItem> GetBoothInformationDisplayItems(int boothNumber)
         {
             // Get the list booth in the list. Ideally there should be only one booth in the list
             var booth = boothInformation.getBoothInformation(boothNumber);
             var boothItems = new List<DisplayItem>();
 
-            boothItems.AddRange(GetAgentInformationDisplayItems(boothNumber));
+            boothItems.Add(new DisplayItem() { Text = "Booth Address", Detail = booth.address });
+            boothItems.Add(new DisplayItem() { Text = "Booth Number", Detail = booth.boothNumber.ToString() });
+            boothItems.Add(new DisplayItem() { Text = "Booth Population", Detail = booth.population.ToString() });
+            boothItems.Add(new DisplayItem() { Text = "Ward Number", Detail = booth.wardNumber.ToString() });
+            boothItems.Add(new DisplayItem() { Text = "Locality", Detail = booth.locality });
 
-            boothItems.Add(new DisplayItem() { Text = "Booth Address", Detail = booth.address, boothNumber = booth.boothNumber });
-            boothItems.Add(new DisplayItem() { Text = "Booth Number", Detail = string.Format("{0}", booth.boothNumber, boothNumber = booth.boothNumber) });
-            boothItems.Add(new DisplayItem() { Text = "Booth Population", Detail = string.Format("{0}", booth.population, boothNumber = booth.boothNumber) });
-            boothItems.Add(new DisplayItem() { Text = "Ward Number", Detail = string.Format("{0}", booth.wardNumber, boothNumber = booth.boothNumber) });
-            boothItems.Add(new DisplayItem() { Text = "Locality", Detail = booth.locality, boothNumber = booth.boothNumber });
-            
+            boothItems.ForEach(x => x.boothNumber = boothNumber);
 
-            boothItems = boothItems.OrderBy(x => x.Text).ToList();
             try
             {
-                boothItems.AddRange(GetRoadInformationDisplayItems(boothNumber));                
+                boothItems.AddRange(GetRoadInformationDisplayItems(boothNumber));
+                boothItems.AddRange(GetAgentInformationDisplayItems(boothNumber));
             }
-            catch(Exception)
+            catch (Exception)
             {
 
             }
+
+            boothItems = boothItems.OrderBy(x => x.Text).ToList();
 
             return boothItems;
         }
