@@ -11,10 +11,14 @@ namespace Srinki.services
         {
             get
             {
-                string time = "";
-                if (Application.Current.Properties["lastUpdatedTime"] != null)
-                    time = Application.Current.Properties["lastUpdatedTime"].ToString();
-                return time;
+                try
+                {
+                    return Application.Current.Properties["lastUpdatedTime"].ToString();
+                }
+                catch(Exception)
+                {
+                    return "";
+                }
             }
         }
 

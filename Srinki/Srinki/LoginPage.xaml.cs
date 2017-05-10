@@ -39,7 +39,10 @@ namespace Srinki
                     pinCode
                 }
             };
+
+            this.Appearing += (object sender, EventArgs e) => pinCode.Focus();
         }
+
 
         async private void PinCode_Completed(object sender, EventArgs e)
         {

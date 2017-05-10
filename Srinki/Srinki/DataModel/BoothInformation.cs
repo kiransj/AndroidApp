@@ -96,5 +96,11 @@ namespace Srinki.DataModel
             if (boothInformation == null) throw new Exception("booth information not initialized. Try updating data");
             return boothInformation.Count;
         }
+
+        public List<BoothInformation> getBoothInformation(string search)
+        {
+            if (boothInformation == null) throw new Exception("booth information not initialized. Try updating data");
+            return boothInformation.Where(x => x.address.Contains(search) || x.locality.Contains(search)).ToList();
+        }
     }
 }

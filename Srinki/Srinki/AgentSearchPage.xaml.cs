@@ -14,20 +14,27 @@ namespace Srinki
     public partial class AgentSearchPage : ContentPage
     {
         ListView listView;
-        Switch searchType;
-        Entry searchText;
-        bool searchByName = true;
+        Label label;
         public AgentSearchPage()
         {
             InitializeComponent();
 
-            searchText = new Entry
+            var searchText = new Entry
             {
                 Placeholder = "Search by Name",
                 HorizontalOptions = LayoutOptions.FillAndExpand,
-                VerticalOptions = LayoutOptions.Center
+                VerticalOptions = LayoutOptions.Center,
+                TextColor = Color.Blue
             };
-            searchText.Completed += searchText_Completed;
+            searchText.TextChanged += searchText_Completed;
+
+            label = new Label
+            {
+                HorizontalOptions = LayoutOptions.FillAndExpand,
+                VerticalOptions = LayoutOptions.Center,
+                HorizontalTextAlignment = TextAlignment.End,
+                TextColor = Color.Blue
+            };
 
             listView = new ListView
             {
@@ -43,16 +50,8 @@ namespace Srinki
                     return cell;
                 }),
                 SeparatorColor = Color.Black,
-            };
-            listView.ItemSelected += ListView_ItemSelected;
-
-            searchType = new Switch
-            {
-                HorizontalOptions = LayoutOptions.End,
-                VerticalOptions = LayoutOptions.End,                
-
-            };
-            searchType.Toggled += SearchType_Toggled;
+            };            
+            listView.ItemTapped += ListView_ItemTapped;
 
             // Build the page.
             this.Content = new StackLayout
@@ -62,35 +61,50 @@ namespace Srinki
                 {
                     new StackLayout
                     {
-                       Orientation = StackOrientation.Horizontal,
-                       Children =
+                        Orientation = StackOrientation.Horizontal,
+                        Children =
                         {
                             searchText,
-                            searchType
+                            label,
                         }
                     },
                     listView,
                 },
             };
+
+            this.Appearing += (object sender, EventArgs e) => searchText.Focus();
+
+            //BackgroundImage = "stats";
         }
 
-        private void SearchType_Toggled(object sender, ToggledEventArgs e)
+
+        async private void ListView_ItemTapped(object sender, ItemTappedEventArgs e)
         {
-            if(searchByName)
+            if (e.Item == null) return;
+            DisplayItem item = (DisplayItem)e.Item;
+            string action = await DisplayActionSheet("Actions", "Cancel", null, "Call", "Share", "Info");
+            switch(action)
             {
-                searchText.Placeholder = "Search by Agent Detail";
-            }
-            else
-            {
-
-                searchText.Placeholder = "Search by Name";
+                case "Cancel": return;
+                case "Call": IntentService.Call(item.phoneNumber); return;
+                case "Share":
+                    {
+                        var boothInformation = DataService.getDataService().GetBoothInformation(item.boothNumber);
+                        var details = item.Detail + "\nBooth Address " + boothInformation.address + "\nPopulation: " + boothInformation.population;
+                        IntentService.SendData(details); return;
+                    }
+                case "Info":
+                    {
+                        var boothInformation = DataService.getDataService().GetBoothInformation(item.boothNumber);
+                        var details = item.Detail + "\nBooth Address " + boothInformation.address + "\nPopulation: " + boothInformation.population;
+                        await DisplayAlert(item.Text, details, "Ok");
+                    }
+                    return;
+                default:
+                    return;
             }
         }
 
-        private void ListView_ItemSelected(object sender, SelectedItemChangedEventArgs e)
-        {
-
-        }
 
         async private void searchText_Completed(object sender, EventArgs e)
         {
@@ -98,12 +112,14 @@ namespace Srinki
             try
             {
                 Entry en = (Entry)sender;
-                name = en.Text;
-                listView.ItemsSource = DataService.getDataService().GetAgentInformationDisplayItemsByName(name);
-
+                name = en.Text;                                
+                var result = DataService.getDataService().GetAgentInformationDisplayItemsByName(name);
+                listView.ItemsSource = result;
+                label.Text = string.Format("{0} Agent found", result.Count);
             }
             catch (Exception ex)
             {
+                
                 await DisplayAlert("Error", "Agent Information not found for " + name + "\n" + ex.Message, "Ok");
             }
         }

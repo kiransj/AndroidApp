@@ -72,6 +72,18 @@ namespace Srinki.services
             dataStatus = agentInformation.readDataFromFile() && dataStatus;
         }
 
+        public List<BoothInformation> GetBoothInformation(string search)
+        {
+            return boothInformation.getBoothInformation(search);
+        }
+
+
+        public BoothInformation GetBoothInformation(int boothNumber)
+        {
+            return boothInformation.getBoothInformation(boothNumber);
+        }
+
+
 
         public List<DisplayItem> GetRoadInformationDisplayItems(int boothNumber)
         {
@@ -129,8 +141,8 @@ namespace Srinki.services
                 agents.Add(new DisplayItem
                 {
                     phoneNumber = agent.phoneNumber,
-                    Text = "Agent " + count,
-                    Detail = agent.agentName + ", " + agent.phoneNumber + "\n" + agent.address,
+                    Text = "Booth Number " + agent.boothNumber,
+                    Detail =  agent.agentName + ", " + agent.phoneNumber + "\n" + agent.address,
                     boothNumber = agent.boothNumber
                 });
                 count++;

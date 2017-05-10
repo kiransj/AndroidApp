@@ -13,7 +13,7 @@ namespace Srinki
 {
     public partial class MainPage : ContentPage
     {        
-        Button updateData, boothInformation, agentInformation, Contacts, notification, stats;
+        Button updateData, boothInformation, agentInformation, boothSearch, contacts, stats;
         public MainPage()
         {
             InitializeComponent();
@@ -48,15 +48,16 @@ namespace Srinki
             };
             agentInformation.Clicked += AgentInformation_Clicked;
 
-            Contacts = new Button
+            boothSearch = new Button
             {
-                Text = "Contacts",
+                Text = "Booth Search",
                 Margin = 1,
                 HorizontalOptions = LayoutOptions.FillAndExpand,
                 VerticalOptions = LayoutOptions.FillAndExpand,
                 TextColor = Color.Green,                
                 IsEnabled = false
             };
+            boothSearch.Clicked += BoothSearch_Clicked;
 
             updateData = new Button
             {
@@ -67,9 +68,9 @@ namespace Srinki
             };
             updateData.Clicked += UpdateData_Clicked;
 
-            notification = new Button
+            contacts = new Button
             {
-                Text = "Notification",
+                Text = "Contacts",
                 Margin = 1,
                 HorizontalOptions = LayoutOptions.FillAndExpand,
                 VerticalOptions = LayoutOptions.FillAndExpand,
@@ -90,10 +91,10 @@ namespace Srinki
 
             grid.Children.Add(boothInformation, 0, 0);
             grid.Children.Add(agentInformation, 0, 1);
-            grid.Children.Add(Contacts, 1, 0);
+            grid.Children.Add(boothSearch, 1, 0);
             grid.Children.Add(updateData, 1, 1);
 
-            grid.Children.Add(notification, 0, 2);
+            grid.Children.Add(contacts, 0, 2);
             grid.Children.Add(stats, 1, 2);
 
 #if false
@@ -112,6 +113,11 @@ namespace Srinki
             }
             
             this.Content = grid;
+        }
+
+        private void BoothSearch_Clicked(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         async private void AgentInformation_Clicked(object sender, EventArgs e)

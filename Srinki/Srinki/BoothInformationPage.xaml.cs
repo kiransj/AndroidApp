@@ -29,7 +29,7 @@ namespace Srinki
                 Keyboard = Keyboard.Numeric,
                 FontSize = 25
             };
-            boothNumberInput.Completed += BoothNumberInput_Completed;            
+            boothNumberInput.TextChanged += BoothNumberInput_TextChanged;            
             listView = new ListView
             {
                 ItemsSource = new List<DisplayItem>(), //Create a empty list
@@ -90,6 +90,9 @@ namespace Srinki
                     },                    
                 },
             };
+
+
+            this.Appearing += (object sender, EventArgs e) => boothNumberInput.Focus();
         }
 
         async private void AgentDetails_Clicked(object sender, EventArgs e)
@@ -123,13 +126,18 @@ namespace Srinki
             await DisplayAlert(item.Text, item.Detail, "Ok");
         }
 
-        async private void BoothNumberInput_Completed(object sender, EventArgs e)
+        async private void BoothNumberInput_TextChanged(object sender, EventArgs e)
         {
             int boothNumber = 0;
             try
-            {
+            {                
                 Entry en = (Entry)sender;
-                boothNumber = Int32.Parse(en.Text);
+                if (en.Text.Length == 0)
+                {
+                    listView.ItemsSource = null;
+                    return;
+                }
+                boothNumber = Int32.Parse(en.Text);          
                 listView.ItemsSource = DataService.getDataService().GetBoothInformationDisplayItems(boothNumber);
                 currentBoothNumberDisplayed = boothNumber;
                 shareButton.IsEnabled = agentDetails.IsEnabled = true;
