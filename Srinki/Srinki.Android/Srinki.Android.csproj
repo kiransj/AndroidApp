@@ -147,6 +147,9 @@
   <ItemGroup>
     <AndroidResource Include="Resources\Drawable\notification.png" />
   </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\Drawable\jds.jpg" />
+  </ItemGroup>
   <Import Project="..\Srinki\Srinki.projitems" Label="Shared" Condition="Exists('..\Srinki\Srinki.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Import Project="..\..\packages\Xamarin.Android.Support.Vector.Drawable.23.3.0\build\Xamarin.Android.Support.Vector.Drawable.targets" Condition="Exists('..\..\packages\Xamarin.Android.Support.Vector.Drawable.23.3.0\build\Xamarin.Android.Support.Vector.Drawable.targets')" />

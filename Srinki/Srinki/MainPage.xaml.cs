@@ -85,7 +85,7 @@ namespace Srinki
                 HorizontalOptions = LayoutOptions.FillAndExpand,
                 VerticalOptions = LayoutOptions.FillAndExpand,
                 TextColor = Color.Green,                
-                IsEnabled = false
+                IsEnabled = false                
             };
             stats.Clicked += Stats_Clicked;
 
@@ -112,7 +112,7 @@ namespace Srinki
                 stats.IsEnabled = true;
             }
             
-            this.Content = grid;
+            this.Content = grid;            
         }
 
         private void BoothSearch_Clicked(object sender, EventArgs e)

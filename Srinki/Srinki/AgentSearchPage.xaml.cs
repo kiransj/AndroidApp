@@ -80,8 +80,11 @@ namespace Srinki
 
         async private void ListView_ItemTapped(object sender, ItemTappedEventArgs e)
         {
+            
             if (e.Item == null) return;
             DisplayItem item = (DisplayItem)e.Item;
+
+            listView.SelectedItem = null;
             string action = await DisplayActionSheet("Actions", "Cancel", null, "Call", "Share", "Info");
             switch(action)
             {

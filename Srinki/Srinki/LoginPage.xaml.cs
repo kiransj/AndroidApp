@@ -21,7 +21,7 @@ namespace Srinki
             {
                 Placeholder = "Enter Pin Code",
                 HorizontalTextAlignment = TextAlignment.Center,
-                TextColor = Color.Blue,
+                TextColor = Color.Red,
                 Keyboard = Keyboard.Numeric,
                 FontSize = 25,
                 IsPassword = true
@@ -41,6 +41,7 @@ namespace Srinki
             };
 
             this.Appearing += (object sender, EventArgs e) => pinCode.Focus();
+            BackgroundImage = "jds";
         }
 
 
