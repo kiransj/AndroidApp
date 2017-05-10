@@ -49,7 +49,7 @@ namespace Srinki
                 Orientation = StackOrientation.Vertical,
                 Children =
                 {
-                    new Label {Text = "Agent details for Booth Number " + boothNumber, FontSize = 20},
+                    new Entry {Text = "Agent details for Booth Number " + boothNumber, FontSize = 20, IsEnabled = false},
                     listView
                 },
             };

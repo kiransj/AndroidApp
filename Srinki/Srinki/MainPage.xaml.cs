@@ -46,6 +46,7 @@ namespace Srinki
                 TextColor = Color.Green,                
                 IsEnabled = false
             };
+            agentInformation.Clicked += AgentInformation_Clicked;
 
             Contacts = new Button
             {
@@ -64,6 +65,7 @@ namespace Srinki
                 TextColor = Color.Green,
                 Margin = 1,
             };
+            updateData.Clicked += UpdateData_Clicked;
 
             notification = new Button
             {
@@ -84,6 +86,7 @@ namespace Srinki
                 TextColor = Color.Green,                
                 IsEnabled = false
             };
+            stats.Clicked += Stats_Clicked;
 
             grid.Children.Add(boothInformation, 0, 0);
             grid.Children.Add(agentInformation, 0, 1);
@@ -99,10 +102,7 @@ namespace Srinki
             Contacts.Image = "Contacts";
             notification.Image = "notification";
 #endif
-
-            stats.Clicked += Stats_Clicked;
-            updateData.Clicked += UpdateData_Clicked;
-
+                        
             if(DataService.getDataService().DataStatus)
             {
                 updateData.IsEnabled = true;
@@ -112,6 +112,11 @@ namespace Srinki
             }
             
             this.Content = grid;
+        }
+
+        async private void AgentInformation_Clicked(object sender, EventArgs e)
+        {
+            await this.Navigation.PushModalAsync(new AgentSearchPage());
         }
 
         private void Stats_Clicked(object sender, EventArgs e)

@@ -117,6 +117,28 @@ namespace Srinki.services
             return agents;
         }
 
+        public List<DisplayItem> GetAgentInformationDisplayItemsByName(string name)
+        {
+            var agentList = agentInformation.getAgentInformationByName(name);
+
+            // Get the list booth in the list. Ideally there should be only one booth in the list            
+            var agents = new List<DisplayItem>();
+            int count = 1;
+            foreach (var agent in agentList)
+            {
+                agents.Add(new DisplayItem
+                {
+                    phoneNumber = agent.phoneNumber,
+                    Text = "Agent " + count,
+                    Detail = agent.agentName + ", " + agent.phoneNumber + "\n" + agent.address,
+                    boothNumber = agent.boothNumber
+                });
+                count++;
+            }
+
+            return agents;
+        }
+
         public List<DisplayItem> GetBoothInformationDisplayItems(int boothNumber)
         {
             // Get the list booth in the list. Ideally there should be only one booth in the list
