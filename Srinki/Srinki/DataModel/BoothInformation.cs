@@ -114,5 +114,14 @@ namespace Srinki.DataModel
             if (boothInformation == null) throw new Exception("booth information not initialized. Try updating data");
             return boothInformation.Where(x => x.wardNumber == wardNumber).ToList();
         }
+
+        public List<BoothInformation> getBoothsByAddress(string address)
+        {
+            if (boothInformation == null) throw new Exception("booth information not initialized. Try updating data");
+            return boothInformation.Where(x => (
+                                               ((x.address.IndexOf(address, StringComparison.OrdinalIgnoreCase)) >= 0) || 
+                                               (x.locality.IndexOf(address, StringComparison.OrdinalIgnoreCase)) >= 0)
+                                               ).ToList();
+        }
     }
 }

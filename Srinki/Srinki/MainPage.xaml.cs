@@ -54,7 +54,8 @@ namespace Srinki
                 Margin = 1,
                 HorizontalOptions = LayoutOptions.FillAndExpand,
                 VerticalOptions = LayoutOptions.FillAndExpand,
-                TextColor = Color.Green,                                
+                TextColor = Color.Green,
+                IsEnabled = false
             };
             boothSearch.Clicked += BoothSearch_Clicked;
 
@@ -102,13 +103,14 @@ namespace Srinki
             Contacts.Image = "Contacts";
             notification.Image = "notification";
 #endif
-                        
+
             if(DataService.getDataService().DataStatus)
             {
                 updateData.IsEnabled = true;
                 boothInformation.IsEnabled = true;
                 agentInformation.IsEnabled = true;
-                stats.IsEnabled = true;
+                boothSearch.IsEnabled = true;
+                stats.IsEnabled = false;
             }
             
             this.Content = grid;            
@@ -157,6 +159,7 @@ namespace Srinki
                 Device.BeginInvokeOnMainThread(() => {
                     updateData.IsEnabled = true;
                     boothInformation.IsEnabled = true;
+                    boothSearch.IsEnabled = true;
                     agentInformation.IsEnabled = true;
                     updateData.Text = updated == false ? "Failed to Update Data. Try again?" : "Update Data\nLast Updated on " + Properties.lastUpdatedTime;
                     updateData.TextColor = (updated == true) ? Color.Green : Color.Red;

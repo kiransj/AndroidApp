@@ -208,5 +208,23 @@ namespace Srinki.services
             }
             return list;
         }
+
+        public List<DisplayItem> getBoothInformationDisplayItemByAddress(string address)
+        {
+            var booths = boothInformation.getBoothsByAddress(address);
+            List<DisplayItem> list = new List<DisplayItem>();
+
+            foreach (var booth in booths)
+            {
+                list.Add(new DisplayItem()
+                {
+                    Text = "Booth Number " + booth.boothNumber.ToString(),
+                    Detail = string.Format("Population {0}\nLocality {1}\nAddress {2}", booth.population, booth.locality, booth.address),
+                    boothNumber = booth.boothNumber,
+                    populatin = booth.population
+                });
+            }
+            return list;
+        }
     }
 }

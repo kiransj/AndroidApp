@@ -4,5 +4,4 @@
              x:Class="Srinki.BoothSearchPage"
              xmlns:pages="clr-namespace:Srinki;assembly=Srinki"
              Title="TabbedPage">
- 
 </TabbedPage>
