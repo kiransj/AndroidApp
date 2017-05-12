@@ -54,8 +54,7 @@ namespace Srinki
                 Margin = 1,
                 HorizontalOptions = LayoutOptions.FillAndExpand,
                 VerticalOptions = LayoutOptions.FillAndExpand,
-                TextColor = Color.Green,                
-                IsEnabled = false
+                TextColor = Color.Green,                                
             };
             boothSearch.Clicked += BoothSearch_Clicked;
 
@@ -115,9 +114,9 @@ namespace Srinki
             this.Content = grid;            
         }
 
-        private void BoothSearch_Clicked(object sender, EventArgs e)
+        async private void BoothSearch_Clicked(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            await this.Navigation.PushModalAsync(new BoothSearchPage());
         }
 
         async private void AgentInformation_Clicked(object sender, EventArgs e)

@@ -184,5 +184,10 @@ namespace Srinki.services
         {
             return boothInformation.getBoothCount();
         }
+
+        public List<int> getAllWardNumbers()
+        {
+            return boothInformation.getAllWardNumbers();
+        }
     }
 }

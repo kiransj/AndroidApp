@@ -45,6 +45,7 @@ namespace Srinki
                 }),
                 SeparatorColor = Color.Black,                
             };
+            listView.SeparatorColor = Color.Blue;
 
             listView.ItemSelected += ListView_ItemSelected;
 

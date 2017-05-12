@@ -41,7 +41,7 @@ namespace Srinki
             };
 
             this.Appearing += (object sender, EventArgs e) => pinCode.Focus();
-            BackgroundImage = "jds";
+            //BackgroundImage = "jds";
         }
 
 
