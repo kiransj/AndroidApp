@@ -13,6 +13,7 @@ namespace Srinki.services
         public string Text { get; set; }
         public string Detail { get; set; }
         public string phoneNumber { get; set; }
+        public int populatin { get; set; }
     }
 
     class DataService
@@ -201,7 +202,8 @@ namespace Srinki.services
                 {
                     Text = "Booth Number " + booth.boothNumber.ToString(),
                     Detail = string.Format("Population {0}\nLocality {1}\nAddress {2}", booth.population, booth.locality, booth.address),
-                    boothNumber = booth.boothNumber
+                    boothNumber = booth.boothNumber,
+                    populatin = booth.population
                 });
             }
             return list;

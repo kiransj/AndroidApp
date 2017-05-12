@@ -17,6 +17,7 @@ namespace Srinki
         ListView listViewAddressSearch;
         ListView listViewWardSearch;
         List<int> wardList;
+        Label stats;
         Picker wardPicker;
         public BoothSearchPage()
         {
@@ -69,7 +70,7 @@ namespace Srinki
             wardPicker.SelectedIndexChanged += WardPicker_SelectedIndexChanged;
 
             wardList = DataService.getDataService().getAllWardNumbers();            
-            wardList.ForEach(x =>  { wardPicker.Items.Add("Booths in " + x.ToString()); });
+            wardList.ForEach(x =>  { wardPicker.Items.Add("Booths in Ward " + x.ToString()); });
 
             this.Children.Add(new ContentPage
             {
@@ -80,16 +81,22 @@ namespace Srinki
                     {
                         new Entry
                         {
-                            Placeholder = "Enter booth Address",
-                            FontSize = 30,
+                            Placeholder = "Enter booth Address",                            
                             HorizontalTextAlignment = TextAlignment.Center,
-                            Keyboard = Keyboard.Text
+                            Keyboard = Keyboard.Text,
+                            FontSize = 30
                         },
                         listViewAddressSearch
                     }
                 }
             });
 
+            stats = new Label
+            {
+                HorizontalOptions = LayoutOptions.FillAndExpand,
+                VerticalOptions = LayoutOptions.CenterAndExpand,
+                TextColor = Color.Blue,                
+            };
             this.Children.Add(new ContentPage
             {
                 Title = "Booth Search by ward",
@@ -97,7 +104,15 @@ namespace Srinki
                 {
                     Children =
                     {
-                        wardPicker,
+                        new StackLayout
+                        {
+                            Orientation = StackOrientation.Horizontal,
+                            Children =
+                            {
+                                wardPicker,
+                                stats
+                            }
+                        },
                         listViewWardSearch
                     }
                 },
@@ -117,7 +132,9 @@ namespace Srinki
         {
             var picker = (Picker)sender;
             int wardNumber = wardList[picker.SelectedIndex];
-            listViewWardSearch.ItemsSource = DataService.getDataService().getBoothInformationDisplayItemByWard(wardNumber);            
+            var boothList = DataService.getDataService().getBoothInformationDisplayItemByWard(wardNumber);
+            listViewWardSearch.ItemsSource = boothList;
+            stats.Text = string.Format("Population : {0}\nNumber of Booths : {1}", boothList.Sum(x => x.populatin).ToString(), boothList.Count);
         }
 
         async private void boothInformation_Clicked1(object sender, EventArgs e)
