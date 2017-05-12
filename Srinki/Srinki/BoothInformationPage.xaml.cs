@@ -17,22 +17,28 @@ namespace Srinki
         ListView listView;        
         int currentBoothNumberDisplayed = 0;
         Button shareButton, agentDetails;
-        public BoothInformationPage()
+        public BoothInformationPage(int boothNumber = 0)
         {
             InitializeComponent();
-            
+            currentBoothNumberDisplayed = boothNumber;
+
             var boothNumberInput = new Entry
             {
                 Placeholder = "Booth Number",
                 HorizontalTextAlignment = TextAlignment.Center,
                 TextColor = Color.Blue,
                 Keyboard = Keyboard.Numeric,
-                FontSize = 25
+                FontSize = 25,                
+                IsEnabled = boothNumber == 0 ? true : false // Search mode Or information mode
             };
-            boothNumberInput.TextChanged += BoothNumberInput_TextChanged;            
+            
+            // Register for events only if we are in search mode
+            if(boothNumber != 0) { boothNumberInput.Text = string.Format("Booth {0} information", boothNumber); }
+            else { boothNumberInput.TextChanged += BoothNumberInput_TextChanged;  }
+
             listView = new ListView
             {
-                ItemsSource = new List<DisplayItem>(), //Create a empty list
+                ItemsSource = boothNumber == 0 ? new List<DisplayItem>() :  DataService.getDataService().GetBoothInformationDisplayItems(boothNumber),
                 HasUnevenRows = true,
                 ItemTemplate = new DataTemplate(() =>
                 {
@@ -56,7 +62,7 @@ namespace Srinki
                 HorizontalOptions = LayoutOptions.FillAndExpand,
                 VerticalOptions = LayoutOptions.CenterAndExpand,
                 HeightRequest = 70,
-                IsEnabled = false
+                IsEnabled = boothNumber == 0 ? false : true
             };
             shareButton.Clicked += ShareButton_Clicked;
 
@@ -66,8 +72,8 @@ namespace Srinki
                 TextColor = Color.Blue,
                 HorizontalOptions =  LayoutOptions.FillAndExpand,
                 VerticalOptions = LayoutOptions.CenterAndExpand,
-                HeightRequest = 70,
-                IsEnabled = false
+                HeightRequest = 70,                
+                IsEnabled = boothNumber == 0 ? false : true
             };
 
             agentDetails.Clicked += AgentDetails_Clicked;
@@ -87,18 +93,25 @@ namespace Srinki
                         {
                             shareButton,
                             agentDetails
-                        }                        
+                        }
                     },                    
                 },
             };
-
 
             this.Appearing += (object sender, EventArgs e) => boothNumberInput.Focus();
         }
 
         async private void AgentDetails_Clicked(object sender, EventArgs e)
         {
-            await this.Navigation.PushModalAsync(new AgentInformationPage(currentBoothNumberDisplayed));
+            try
+            {
+                var agent = currentBoothNumberDisplayed;
+                await this.Navigation.PushModalAsync(new AgentInformationPage(agent));
+            }
+            catch(Exception ex)
+            {
+                await DisplayAlert("Error!", "Agent Information not updated for booth number " + currentBoothNumberDisplayed.ToString() + "\n" + ex.Message, "Okay");
+            }            
         }
 
         async private void ShareButton_Clicked(object sender, EventArgs e)

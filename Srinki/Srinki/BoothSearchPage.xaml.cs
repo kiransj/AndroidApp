@@ -23,6 +23,10 @@ namespace Srinki
             InitializeComponent();
             BarBackgroundColor = Color.Blue;
 
+            MenuItem boothInformation = new MenuItem { Text = "Booth Information" };
+            boothInformation.SetBinding(MenuItem.CommandParameterProperty, new Binding("."));
+            boothInformation.Clicked += boothInformation_Clicked1;
+
             listViewAddressSearch = new ListView
             {
                 ItemsSource = new List<DisplayItem>(), //Create a empty list
@@ -33,12 +37,14 @@ namespace Srinki
                     cell.SetBinding(TextCell.TextProperty, new Binding("Text"));
                     cell.SetBinding(TextCell.DetailProperty, new Binding("Detail"));
                     cell.TextColor = Color.Red;
+                    cell.ContextActions.Add(boothInformation);                    
 
                     return cell;
                 }),
                 SeparatorColor = Color.Black,
             };
             listViewAddressSearch.SeparatorColor = Color.Blue;
+            listViewAddressSearch.ItemSelected += ListViewAddressSearch_ItemSelected;
 
             listViewWardSearch = new ListView
             {
@@ -50,27 +56,20 @@ namespace Srinki
                     cell.SetBinding(TextCell.TextProperty, new Binding("Text"));
                     cell.SetBinding(TextCell.DetailProperty, new Binding("Detail"));
                     cell.TextColor = Color.Red;
+                    cell.ContextActions.Add(boothInformation);                    
 
                     return cell;
                 }),
                 SeparatorColor = Color.Black,
             };
             listViewWardSearch.SeparatorColor = Color.Blue;
+            listViewWardSearch.ItemSelected += ListViewAddressSearch_ItemSelected;
 
-            var page1 = 
-            
+            wardPicker = new Picker { Title = "Choose Ward Number" };
+            wardPicker.SelectedIndexChanged += WardPicker_SelectedIndexChanged;
 
-            wardPicker = new Picker
-            {
-                Title = "Choose Ward Number",                
-            };
-
-            wardList = DataService.getDataService().getAllWardNumbers();
-            foreach (var ward in )
-            {
-                wardPicker.Items.Add(ward.ToString());
-            }
-                   
+            wardList = DataService.getDataService().getAllWardNumbers();            
+            wardList.ForEach(x =>  { wardPicker.Items.Add("Booths in " + x.ToString()); });
 
             this.Children.Add(new ContentPage
             {
@@ -104,5 +103,29 @@ namespace Srinki
                 },
             });
         }
+
+        async private void ListViewAddressSearch_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+        {
+            ListView lv = (ListView)sender;
+            if (lv.SelectedItem == null) return;
+            DisplayItem item = (DisplayItem)lv.SelectedItem;
+            lv.SelectedItem = null;            
+            await DisplayAlert(item.Text, item.Detail, "Ok");
+        }
+
+        private void WardPicker_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var picker = (Picker)sender;
+            int wardNumber = wardList[picker.SelectedIndex];
+            listViewWardSearch.ItemsSource = DataService.getDataService().getBoothInformationDisplayItemByWard(wardNumber);            
+        }
+
+        async private void boothInformation_Clicked1(object sender, EventArgs e)
+        {
+            var mi = ((MenuItem)sender);
+            var item = (DisplayItem)mi.CommandParameter;
+            await this.Navigation.PushModalAsync(new BoothInformationPage(item.boothNumber));
+        }
+
     }
 }

@@ -189,5 +189,22 @@ namespace Srinki.services
         {
             return boothInformation.getAllWardNumbers();
         }
+
+        public List<DisplayItem> getBoothInformationDisplayItemByWard(int wardNumber)
+        {
+            var booths = boothInformation.getBoothsByWard(wardNumber);
+            List<DisplayItem> list = new List<DisplayItem>();
+
+            foreach(var booth in booths)
+            {
+                list.Add(new DisplayItem()
+                {
+                    Text = "Booth Number " + booth.boothNumber.ToString(),
+                    Detail = string.Format("Population {0}\nLocality {1}\nAddress {2}", booth.population, booth.locality, booth.address),
+                    boothNumber = booth.boothNumber
+                });
+            }
+            return list;
+        }
     }
 }
