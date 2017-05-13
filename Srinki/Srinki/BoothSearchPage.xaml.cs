@@ -36,13 +36,13 @@ namespace Srinki
                 {
                     TextCell cell = new TextCell();
                     cell.SetBinding(TextCell.TextProperty, new Binding("Text"));
-                    cell.SetBinding(TextCell.DetailProperty, new Binding("Detail"));
+                    cell.SetBinding(TextCell.DetailProperty, new Binding("Detail"));                    
                     cell.TextColor = Color.Red;
-                    cell.ContextActions.Add(boothInformation);                    
-
+                    cell.Height = 50;
+                    cell.ContextActions.Add(boothInformation);                                        
                     return cell;
                 }),
-                SeparatorColor = Color.Black,
+                SeparatorColor = Color.Black,                
             };
             listViewAddressSearch.SeparatorColor = Color.Blue;
             listViewAddressSearch.ItemSelected += ListViewAddressSearch_ItemSelected;
@@ -57,8 +57,8 @@ namespace Srinki
                     cell.SetBinding(TextCell.TextProperty, new Binding("Text"));
                     cell.SetBinding(TextCell.DetailProperty, new Binding("Detail"));
                     cell.TextColor = Color.Red;
-                    cell.ContextActions.Add(boothInformation);                    
-
+                    cell.ContextActions.Add(boothInformation);
+                    cell.Height = 50;
                     return cell;
                 }),
                 SeparatorColor = Color.Black,
@@ -143,7 +143,7 @@ namespace Srinki
             Entry address = (Entry)sender;
             var boothList = DataService.getDataService().getBoothInformationDisplayItemByAddress(address.Text);
             listViewAddressSearch.ItemsSource = boothList;
-            stats_address.Text = string.Format("Population : {0}\nNumber of Booths : {1}", boothList.Sum(x => x.populatin).ToString(), boothList.Count);
+            stats_address.Text = string.Format("Population : {0}\nNumber of Booths : {1}", boothList.Sum(x => x.population).ToString(), boothList.Count);
         }
 
         async private void ListViewAddressSearch_ItemSelected(object sender, SelectedItemChangedEventArgs e)
@@ -166,7 +166,7 @@ namespace Srinki
             int wardNumber = wardList[picker.SelectedIndex];
             var boothList = DataService.getDataService().getBoothInformationDisplayItemByWard(wardNumber);
             listViewWardSearch.ItemsSource = boothList;
-            stats_ward.Text = string.Format("Population : {0}\nNumber of Booths : {1}", boothList.Sum(x => x.populatin).ToString(), boothList.Count);
+            stats_ward.Text = string.Format("Population : {0}\nNumber of Booths : {1}", boothList.Sum(x => x.population).ToString(), boothList.Count);
         }
 
         async private void boothInformation_Clicked1(object sender, EventArgs e)

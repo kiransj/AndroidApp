@@ -36,7 +36,8 @@ namespace Srinki
                     cell.SetBinding(TextCell.DetailProperty, new Binding("Detail"));
                     cell.TextColor = Color.Red;
                     cell.ContextActions.Add(callAgent);
-                    cell.ContextActions.Add(shareAgentInformation);                    
+                    cell.ContextActions.Add(shareAgentInformation);
+                    cell.Height = 50;
                     return cell;
                 }),
                 SeparatorColor = Color.Black,
@@ -70,11 +71,31 @@ namespace Srinki
 
         async private void ListView_ItemTapped(object sender, ItemTappedEventArgs e)
         {
-            ListView lv = (ListView)sender;
-            if (lv.SelectedItem == null) return;
-            DisplayItem di = (DisplayItem)lv.SelectedItem;
-            lv.SelectedItem = null;
-            await DisplayAlert(di.Text, di.Detail, "ok_1");            
+            if (e.Item == null) return;
+            DisplayItem item = (DisplayItem)e.Item;
+            var listView = (ListView)sender;
+            listView.SelectedItem = null;
+            string action = await DisplayActionSheet("Actions", "Cancel", null, "Call", "Share", "Info");
+            switch (action)
+            {
+                case "Cancel": return;
+                case "Call": IntentService.Call(item.phoneNumber); return;
+                case "Share":
+                    {
+                        var boothInformation = DataService.getDataService().GetBoothInformation(item.boothNumber);
+                        var details = item.Detail + "\nBooth Address " + boothInformation.address + "\nPopulation: " + boothInformation.population;
+                        IntentService.SendData(details); return;
+                    }
+                case "Info":
+                    {
+                        var boothInformation = DataService.getDataService().GetBoothInformation(item.boothNumber);
+                        var details = item.Detail + "\nBooth Address " + boothInformation.address + "\nPopulation: " + boothInformation.population;
+                        await DisplayAlert(item.Text, details, "Ok");
+                    }
+                    return;
+                default:
+                    return;
+            }
         }        
 
         protected override bool OnBackButtonPressed()

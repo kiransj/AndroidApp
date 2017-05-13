@@ -89,7 +89,7 @@ namespace Srinki.DataModel
         {
             if (agentInformation == null)
                 throw new Exception("agent information not initialized. Try updating data");
-            return agentInformation.Where(x => x.agentName.Contains(searchPattern)).ToList();
+            return agentInformation.Where(x => (x.agentName.IndexOf(searchPattern, StringComparison.OrdinalIgnoreCase) >= 0)).ToList();
         }
     }
 }

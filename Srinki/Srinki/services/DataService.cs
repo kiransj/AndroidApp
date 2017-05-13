@@ -13,7 +13,13 @@ namespace Srinki.services
         public string Text { get; set; }
         public string Detail { get; set; }
         public string phoneNumber { get; set; }
-        public int populatin { get; set; }
+        public int population { get; set; }
+
+        public DisplayItem()
+        {
+            Text = Detail = phoneNumber = "";
+            boothNumber = population = 0;
+        }
     }
 
     class DataService
@@ -120,9 +126,9 @@ namespace Srinki.services
                 agents.Add(new DisplayItem
                 {
                     phoneNumber = agent.phoneNumber,
-                                  Text = "Agent " + count,
-                                  Detail = agent.agentName + ", " + agent.phoneNumber + "\n" + agent.address,
-                                  boothNumber = agent.boothNumber
+                    Text = "Agent " + count,
+                    Detail = agent.agentName + ", " + agent.phoneNumber + "\n" + agent.address,
+                    boothNumber = agent.boothNumber
                 });
                 count++;
             }
@@ -203,7 +209,7 @@ namespace Srinki.services
                     Text = "Booth Number " + booth.boothNumber.ToString(),
                     Detail = string.Format("Population {0}\nLocality {1}\nAddress {2}", booth.population, booth.locality, booth.address),
                     boothNumber = booth.boothNumber,
-                    populatin = booth.population
+                    population = booth.population
                 });
             }
             return list;
@@ -221,7 +227,7 @@ namespace Srinki.services
                     Text = "Booth Number " + booth.boothNumber.ToString(),
                     Detail = string.Format("Population {0}\nLocality {1}\nAddress {2}", booth.population, booth.locality, booth.address),
                     boothNumber = booth.boothNumber,
-                    populatin = booth.population
+                    population = booth.population
                 });
             }
             return list;

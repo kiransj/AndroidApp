@@ -46,7 +46,7 @@ namespace Srinki
                     cell.SetBinding(TextCell.TextProperty, new Binding("Text"));
                     cell.SetBinding(TextCell.DetailProperty, new Binding("Detail"));
                     cell.TextColor = Color.Red;
-                    
+                    cell.Height = 50;
                     return cell;
                 }),
                 SeparatorColor = Color.Black,                
@@ -137,7 +137,18 @@ namespace Srinki
             if (e.SelectedItem == null) return;
             var item = (DisplayItem)e.SelectedItem;
             ((ListView)sender).SelectedItem = null;
-            await DisplayAlert(item.Text, item.Detail, "Ok");
+            if (item.phoneNumber == "")
+            {
+                await DisplayAlert(item.Text, item.Detail, "Ok");
+            }
+            else
+            {
+                var answer = await DisplayAlert(item.Text, item.Detail, "Ok", "Call");
+                if(!answer)
+                {
+                    IntentService.Call(item.phoneNumber);
+                }
+            }
         }
 
         async private void BoothNumberInput_TextChanged(object sender, EventArgs e)

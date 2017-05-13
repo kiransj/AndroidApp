@@ -47,7 +47,7 @@ namespace Srinki
                     cell.SetBinding(TextCell.TextProperty, new Binding("Text"));
                     cell.SetBinding(TextCell.DetailProperty, new Binding("Detail"));
                     cell.TextColor = Color.Red;
-
+                    cell.Height = 50;
                     return cell;
                 }),
                 SeparatorColor = Color.Black,
