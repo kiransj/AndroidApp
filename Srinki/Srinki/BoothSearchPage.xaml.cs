@@ -152,7 +152,12 @@ namespace Srinki
             if (lv.SelectedItem == null) return;
             DisplayItem item = (DisplayItem)lv.SelectedItem;
             lv.SelectedItem = null;
-            await DisplayAlert(item.Text, item.Detail, "Ok");
+            //await DisplayActionSheet(item.Text, "okay", null, "BoothInformation");
+            var answer = await DisplayAlert(item.Text, item.Detail, "BoothInformation", "Okay");
+            if(answer)
+            {
+                await this.Navigation.PushModalAsync(new BoothInformationPage(item.boothNumber));
+            }
         }
 
         private void WardPicker_SelectedIndexChanged(object sender, EventArgs e)

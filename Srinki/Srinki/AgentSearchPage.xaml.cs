@@ -24,7 +24,8 @@ namespace Srinki
                 Placeholder = "Search by Name",
                 HorizontalOptions = LayoutOptions.FillAndExpand,
                 VerticalOptions = LayoutOptions.Center,
-                TextColor = Color.Blue
+                TextColor = Color.Blue,
+                FontSize = 25,
             };
             searchText.TextChanged += searchText_Completed;
 
