@@ -86,7 +86,7 @@ namespace Srinki
             DisplayItem item = (DisplayItem)e.Item;
 
             listView.SelectedItem = null;
-            string action = await DisplayActionSheet("Actions", "Cancel", null, "Call", "Share", "Info");
+            string action = await DisplayActionSheet("Actions", "Cancel", null, "Call", "Share", "Info", "BoothInformation");
             switch(action)
             {
                 case "Cancel": return;
@@ -104,6 +104,11 @@ namespace Srinki
                         await DisplayAlert(item.Text, details, "Ok");
                     }
                     return;
+                case "BoothInformation":
+                    {
+                        await this.Navigation.PushModalAsync(new BoothInformationPage(item.boothNumber));
+                        return;
+                    }
                 default:
                     return;
             }
