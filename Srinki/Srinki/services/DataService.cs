@@ -97,7 +97,7 @@ namespace Srinki.services
             var roadList = roadInformation.getRoadInformation(boothNumber);
 
             //Check input and throw expection if required
-            if (roadList.Count == 0) throw new Exception("InValid booth Numbers " + boothNumber);
+            if (roadList.Count == 0) throw new Exception("Invalid booth Numbers " + boothNumber);
 
             // Get the list booth in the list. Ideally there should be only one booth in the list            
             var roads = new List<DisplayItem>();
@@ -174,15 +174,25 @@ namespace Srinki.services
 
             try
             {
-                boothItems.AddRange(GetRoadInformationDisplayItems(boothNumber));
                 boothItems.AddRange(GetAgentInformationDisplayItems(boothNumber));
             }
-            catch (Exception)
+            catch(Exception ex)
             {
-
+                //Dont have to do anything as agent information is optional
             }
 
+            // Sort the details before addings road information. Road information should not be sorted
             boothItems = boothItems.OrderBy(x => x.Text).ToList();
+            try
+            {              
+                boothItems.AddRange(GetRoadInformationDisplayItems(boothNumber));
+            }
+            catch (Exception ex)
+            {
+                //Dont have to do anything as road information and agent information is optional
+            }
+            
+
 
             return boothItems;
         }
@@ -230,6 +240,24 @@ namespace Srinki.services
                     population = booth.population
                 });
             }
+            return list;
+        }
+
+        public List<DisplayItem> getBoothInformationDisplayItemByRoad(string address)
+        {
+            var roads = roadInformation.getRoadsByAddress(address);
+            List<DisplayItem> list = new List<DisplayItem>();
+
+            foreach (var road in roads)
+            {
+                list.Add(new DisplayItem()
+                {
+                    Text = "Booth Number " + road.boothNumber.ToString(),
+                    Detail = string.Format("{0}", road.address),
+                    boothNumber = road.boothNumber
+                });
+            }
+
             return list;
         }
     }

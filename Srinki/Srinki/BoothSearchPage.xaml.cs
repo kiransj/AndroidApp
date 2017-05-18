@@ -15,9 +15,9 @@ namespace Srinki
     public partial class BoothSearchPage : TabbedPage
     {
         ListView listViewAddressSearch;
-        ListView listViewWardSearch;
+        ListView listViewWardSearch, listViewRoadSearch;
         List<int> wardList;
-        Label stats_ward, stats_address;
+        Label stats_ward, stats_address, stats_road;
         Picker wardPicker;
         public BoothSearchPage()
         {
@@ -136,6 +136,70 @@ namespace Srinki
                     }
                 },
             });
+
+            listViewRoadSearch = new ListView
+            {
+                ItemsSource = new List<DisplayItem>(), //Create a empty list
+                HasUnevenRows = true,
+                ItemTemplate = new DataTemplate(() =>
+                {
+                    TextCell cell = new TextCell();
+                    cell.SetBinding(TextCell.TextProperty, new Binding("Text"));
+                    cell.SetBinding(TextCell.DetailProperty, new Binding("Detail"));
+                    cell.TextColor = Color.Red;
+                    cell.ContextActions.Add(boothInformation);
+                    cell.Height = 50;
+                    return cell;
+                }),
+                SeparatorColor = Color.Black,
+            };
+            listViewRoadSearch.SeparatorColor = Color.Blue;
+            listViewRoadSearch.ItemSelected += ListViewAddressSearch_ItemSelected; ;
+
+            var boothRoad = new Entry
+            {
+                Placeholder = "Enter Road Address",
+                HorizontalTextAlignment = TextAlignment.Center,
+                Keyboard = Keyboard.Text,
+                FontSize = 25
+            };
+            boothRoad.TextChanged += BoothRoad_TextChanged;
+
+            stats_road = new Label
+            {
+                HorizontalOptions = LayoutOptions.FillAndExpand,
+                VerticalOptions = LayoutOptions.CenterAndExpand,
+                TextColor = Color.Blue,
+            };
+
+            this.Children.Add(new ContentPage
+            {
+                Title = "Booth Search by Road",
+                Content = new StackLayout
+                {
+                    Children =
+                    {
+                        new StackLayout
+                        {
+                            Orientation = StackOrientation.Horizontal,
+                            Children =
+                            {
+                                boothRoad,
+                                stats_road
+                            }
+                        },
+                        listViewRoadSearch
+                    }
+                },
+            });
+        }
+
+        private void BoothRoad_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            Entry address = (Entry)sender;
+            var roadList = DataService.getDataService().getBoothInformationDisplayItemByRoad(address.Text);
+            listViewRoadSearch.ItemsSource = roadList;
+            stats_road.Text = string.Format("Number of Roads : {0}", roadList.Count);
         }
 
         private void BoothAddress_TextChanged(object sender, TextChangedEventArgs e)

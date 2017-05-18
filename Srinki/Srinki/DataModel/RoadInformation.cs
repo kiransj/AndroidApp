@@ -51,6 +51,12 @@ namespace Srinki.DataModel
             return roadInformation.Where(x => x.boothNumber == boothNumber).ToList();            
         }
 
+        public List<RoadInformation> getRoadsByAddress(string address)
+        {
+            if (roadInformation == null) throw new Exception("booth information not initialized. Try updating data");
+            return roadInformation.Where(x => (x.address.IndexOf(address, StringComparison.OrdinalIgnoreCase) >= 0)).ToList();
+        }
+
         public void writeDataToFile()
         {
             if (roadInformation == null) throw new Exception("booth information not initialized. Try updating data");

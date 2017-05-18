@@ -41,6 +41,7 @@ namespace Srinki.DataModel
             IList<IList<Object>> values = valuRange.Values;
             if (values == null) throw new Exception("Failed to fetch data from google sheet. Values is NULL");
             if (values.Count <= 0) throw new Exception("Failed to fetch data from google sheet. Values is 0");
+            
             return values;
         }
     }
