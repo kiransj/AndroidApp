@@ -26,6 +26,7 @@
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)DataModel\AgentInformation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DataModel\BoothInformation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DataModel\ContactsInformation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DataModel\GoogleSheetApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DataModel\Information.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)services\Properties.cs" />

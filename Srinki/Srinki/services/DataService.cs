@@ -27,6 +27,7 @@ namespace Srinki.services
         RoadInformation roadInformation;
         BoothInformation boothInformation;
         AgentInformation agentInformation;
+        ContactsInformation contactsInformation;
         static DataService dataService = null;
         bool dataStatus;
 
@@ -43,6 +44,7 @@ namespace Srinki.services
             roadInformation = new RoadInformation();
             boothInformation = new BoothInformation();
             agentInformation = new AgentInformation();
+            contactsInformation = new ContactsInformation();
         }
 
 
@@ -58,6 +60,7 @@ namespace Srinki.services
             roadInformation.UpdateInformation();
             boothInformation.UpdateInformation();
             agentInformation.UpdateInformation();
+            contactsInformation.UpdateInformation();
             saveDataToFile();
             dataStatus = true;
 
@@ -69,6 +72,7 @@ namespace Srinki.services
             roadInformation.writeDataToFile();
             boothInformation.writeDataToFile();
             agentInformation.writeDataToFile();
+            contactsInformation.writeDataToFile();
             return "";
         }
 
@@ -77,6 +81,7 @@ namespace Srinki.services
             dataStatus = roadInformation.readDataFromFile();
             dataStatus = boothInformation.readDataFromFile() && dataStatus;
             dataStatus = agentInformation.readDataFromFile() && dataStatus;
+            dataStatus = contactsInformation.readDataFromFile() && dataStatus;
         }
 
         public List<BoothInformation> GetBoothInformation(string search)
@@ -258,6 +263,23 @@ namespace Srinki.services
                 });
             }
 
+            return list;
+        }
+
+        public List<DisplayItem> getContactsInformationByWard(int wardNumber)
+        {
+            List<DisplayItem> list = new List<DisplayItem>();
+            var contacts = contactsInformation.getContactInformation(wardNumber);
+
+            foreach(var contact in contacts)
+            {
+                list.Add(new DisplayItem()
+                {
+                    Text = contact.position,
+                    Detail = string.Format("{0},{1}", contact.name, contact.phoneNumber),
+                    phoneNumber = contact.phoneNumber                    
+                });
+            }
             return list;
         }
     }
