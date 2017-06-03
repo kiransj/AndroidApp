@@ -74,9 +74,10 @@ namespace Srinki
                 Margin = 1,
                 HorizontalOptions = LayoutOptions.FillAndExpand,
                 VerticalOptions = LayoutOptions.FillAndExpand,
-                TextColor = Color.Red,                
+                TextColor = Color.Green,
                 IsEnabled = false
             };
+            contacts.Clicked += Contacts_Clicked;
 
             stats = new Button
             {
@@ -110,10 +111,16 @@ namespace Srinki
                 boothInformation.IsEnabled = true;
                 agentInformation.IsEnabled = true;
                 boothSearch.IsEnabled = true;
+                contacts.IsEnabled = true;
                 stats.IsEnabled = false;
             }
             
             this.Content = grid;            
+        }
+
+        async private void Contacts_Clicked(object sender, EventArgs e)
+        {
+            await this.Navigation.PushModalAsync(new ContactsPage());
         }
 
         async private void BoothSearch_Clicked(object sender, EventArgs e)

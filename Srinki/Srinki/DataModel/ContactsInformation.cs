@@ -28,24 +28,28 @@ namespace Srinki.DataModel
 
         }
 
-        public void updateAgentInformation()
+        public override void UpdateInformation()
+        {
+            updateContactsInformation();
+        }
+
+        public void updateContactsInformation()
         {
             var googleSheet = new GoogleSheetApi();
             const string contactInformationpage = "Contacts";
             var values = googleSheet.getSheetData(contactInformationpage, "A3:E");
             var contactInformation_tmp = new List<ContactsInformation>();
             foreach (var row in values)
-            {
+            {                
                 // Print columns A and E, which correspond to indices 0 and 4.
-                Console.WriteLine("{0}, {1}, {2}, {3}, {4}", row[0], row[1], row[2], row[3], row[4]);
+                Console.WriteLine("{0}, {1}, {2}, {3}", row[0], row[1], row[2], row[3]);
                 contactInformation_tmp.Add(new ContactsInformation()
                 {
                     wardNumber = Int32.Parse(row[0].ToString()),
                     position = row[1].ToString(),
                     name = row[2].ToString(),
                     phoneNumber = row[3].ToString(),
-                    Notes = row[4].ToString(),
-
+                    Notes = row.Count == 5 ? row[4].ToString() : ""
                 });
             }
 
@@ -54,7 +58,7 @@ namespace Srinki.DataModel
 
         public void writeDataToFile()
         {
-            if (contactInformation == null) throw new Exception("booth information not initialized. Try updating data");
+            if (contactInformation == null) throw new Exception("contact information not initialized. Try updating data");
 
             var data = JsonConvert.SerializeObject(contactInformation);
             var path = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData);
