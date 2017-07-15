@@ -18,7 +18,6 @@ namespace Srinki
         List<int> wardList;
         public ContactsPage ()
 		{
-			InitializeComponent ();
             wardPicker = new Picker { Title = "Choose Ward Number" };
             wardPicker.SelectedIndexChanged += WardPicker_SelectedIndexChanged; ;
 

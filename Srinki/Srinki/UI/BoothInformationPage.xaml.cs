@@ -18,8 +18,7 @@ namespace Srinki
         int currentBoothNumberDisplayed = 0;
         Button shareButton, agentDetails;
         public BoothInformationPage(int boothNumber = 0)
-        {
-            InitializeComponent();
+        {            
             currentBoothNumberDisplayed = boothNumber;
 
             var boothNumberInput = new Entry

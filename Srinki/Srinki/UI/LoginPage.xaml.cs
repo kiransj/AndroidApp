@@ -16,7 +16,6 @@ namespace Srinki
         static bool loggedIn = false;
         public LoginPage ()
 		{            
-			InitializeComponent ();
             var pinCode = new Entry
             {
                 Placeholder = "Enter Pin Code",

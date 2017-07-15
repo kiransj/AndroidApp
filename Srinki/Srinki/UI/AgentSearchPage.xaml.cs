@@ -17,8 +17,6 @@ namespace Srinki
         Label label;
         public AgentSearchPage()
         {
-            InitializeComponent();
-
             var searchText = new Entry
             {
                 Placeholder = "Search by Name",

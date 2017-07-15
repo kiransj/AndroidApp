@@ -21,7 +21,6 @@ namespace Srinki
         Picker wardPicker;
         public BoothSearchPage()
         {
-            InitializeComponent();
             BarBackgroundColor = Color.Blue;
             
             MenuItem boothInformation = new MenuItem { Text = "Booth Information" };

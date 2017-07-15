@@ -14,9 +14,7 @@ namespace Srinki
 	public partial class AgentInformationPage : ContentPage
 	{                
         public AgentInformationPage(int boothNumber)
-        {
-            InitializeComponent();
-
+        {            
             MenuItem callAgent = new MenuItem { Text = "Call" };
             callAgent.SetBinding(MenuItem.CommandParameterProperty, new Binding("."));
             callAgent.Clicked += callAgent_Clicked1;

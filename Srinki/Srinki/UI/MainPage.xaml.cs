@@ -15,9 +15,7 @@ namespace Srinki
     {        
         Button updateData, boothInformation, agentInformation, boothSearch, contacts, stats;
         public MainPage()
-        {
-            InitializeComponent();
-
+        {            
             var grid = new Grid();
             grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
             grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
@@ -90,11 +88,15 @@ namespace Srinki
             };
             stats.Clicked += Stats_Clicked;
 
+            //1st row
             grid.Children.Add(boothInformation, 0, 0);
-            grid.Children.Add(agentInformation, 0, 1);
             grid.Children.Add(boothSearch, 1, 0);
+
+            //2nd row
+            grid.Children.Add(agentInformation, 0, 1);            
             grid.Children.Add(updateData, 1, 1);
 
+            //3rd row
             grid.Children.Add(contacts, 0, 2);
             grid.Children.Add(stats, 1, 2);
 
